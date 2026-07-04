@@ -1,6 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using myshop.BLL.IServices;
+using myshop.BLL.Mapping.UserMapping;
+using myshop.BLL.Services;
+using myshop.DAL.Data;
+using myshop.DAL.Iconfiguration;
 using myshop.DataAccess;
 using myshop.Entities.Models;
 using Stripe;
@@ -21,6 +26,10 @@ builder.Services.AddIdentity<ApplicationUser,IdentityRole>(
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
+builder.Services.AddAutoMapper(cfg => { },
+typeof(RegisterMapping));
+builder.Services.AddScoped<IUserService, UserServices>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddHttpContextAccessor();
 
 
@@ -63,7 +72,7 @@ app.MapRazorPages();
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Product}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Login}/{id?}");
 
 app.Run();
 

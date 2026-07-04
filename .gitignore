@@ -1,3 +1,117 @@
+# Visual Studio and IDE files
 .vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+.nuget/packages/
+.nuget/NuGet.Config
+.nuget/NuGet.exe
+.nuget/packages.config
+
+# Entity Framework
+*.edmx.diagram
+*.edmx
+
+# Application configuration (development-specific)
+appsettings.json
+appsettings.Production.json
+appsettings.Staging.json
 myshop.Web/appsettings.json
-myshop.Web/bin/Debug/net7.0/appsettings.json
+myshop.Web/bin/Debug/net10.0/appsettings.json
+
+# Database files
+*.mdf
+*.ldf
+*.ndf
+*.sqlite
+*.db
+*.db-shm
+*.db-wal
+
+# Test Results
+TestResults/
+*.trx
+*.coverage
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+
+# ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+runConfigurations/
+
+# Temp files
+*.tmp
+*.bak
+*.backup
+*~
+
+# Visual Studio temp
+.TemporaryKey.pfx
+
+# Certificates
+*.pfx
+*.cer
+
+# Publish artifacts
+PublishProfiles/
+publish/
+
+# Node modules (if using npm/Node.js)
+node_modules/
+jspm_packages/
+
+# Azure Functions
+local.settings.json

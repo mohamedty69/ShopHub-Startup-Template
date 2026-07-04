@@ -1,0 +1,10 @@
+﻿@{
+    ViewData["Title"] = "Roles";
+}
+@model RolesDTO
+<h1>Add Roles</h1>
+<form asp-action="Roles" method="Post">
+    <label asp-for="RoleName"></label>
+    <input asp-for="RoleName" class="form-control" />  
+    <button type="submit">Add</button>
+</form>
