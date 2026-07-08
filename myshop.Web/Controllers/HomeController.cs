@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
-using myshop.BLL.DTOs;
+using myshop.BLL.DTOs.User;
 using myshop.BLL.IServices;
 using myshop.Entities.Models;
 using System.ComponentModel.Design;
@@ -74,12 +75,43 @@ namespace myshop.Web.Controllers
         {
             return View();
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Roles(RolesDTO role)
         {
             var result =  await _userService.AddRolesAsync(role);
             if (result.Succeeded) return Json($"Role is added {role.RoleName}");
             else return Json($"Role is not added {role.RoleName}");
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> DisplayUsers()
+        {
+            var users = await _userService.GetAllUsersAsync();
+            return View( users);
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+            return View(user);
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserDTO editUser)
+        {
+            var result = await _userService.UpdateUserAsync(editUser);
+            if (result.Succeeded) return RedirectToAction("DisplayUsers");
+            else return Json(result.Errors.FirstOrDefault());
+
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var result = await _userService.DeleteUserAsync(id);
+            if (result.Succeeded) return RedirectToAction("DisplayUsers");
+            else return Json($"User is already deleted");
         }
         public IActionResult Privacy()
         {

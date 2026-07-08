@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace myshop.BLL.DTOs
+namespace myshop.BLL.DTOs.User
 {
     public class LoginDTO
     {

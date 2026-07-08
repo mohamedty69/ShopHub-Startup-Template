@@ -8,6 +8,5 @@ namespace myshop.DAL.IRepository
 {
     public interface IUserRepo : IGenericRepo<ApplicationUser>
     {
-        public Task<ApplicationUser> GetUserByEmail(string email);
     }
 }

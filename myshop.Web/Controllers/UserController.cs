@@ -21,10 +21,5 @@ namespace myshop.PL.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterDTO registerDTO)
-        {
-    
-        }
     }
 }

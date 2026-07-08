@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using myshop.BLL.IServices;
-using myshop.BLL.Mapping.UserMapping;
+using myshop.BLL.Mapping.UserMapping.IncomingData;
+using myshop.BLL.Mapping.UserMapping.OutgoingData;
 using myshop.BLL.Services;
 using myshop.DAL.Data;
 using myshop.DAL.Iconfiguration;
@@ -27,7 +28,7 @@ builder.Services.AddIdentity<ApplicationUser,IdentityRole>(
 
 
 builder.Services.AddAutoMapper(cfg => { },
-typeof(RegisterMapping));
+typeof(RegisterMapping),typeof(DisplayUserMapping));
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddHttpContextAccessor();

@@ -3659,11 +3659,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ShopHub-Startup-Template\\myshop.Web\\myshop.PL.csproj",
+      "projectUniqueName": "D:\\Project\\myshop.Web\\myshop.PL.csproj",
       "projectName": "myshop.PL",
-      "projectPath": "D:\\ShopHub-Startup-Template\\myshop.Web\\myshop.PL.csproj",
+      "projectPath": "D:\\Project\\myshop.Web\\myshop.PL.csproj",
       "packagesPath": "C:\\Users\\hamom\\.nuget\\packages\\",
-      "outputPath": "D:\\ShopHub-Startup-Template\\myshop.Web\\obj\\",
+      "outputPath": "D:\\Project\\myshop.Web\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3685,8 +3685,8 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\ShopHub-Startup-Template\\myshop.BLL\\myshop.BLL.csproj": {
-              "projectPath": "D:\\ShopHub-Startup-Template\\myshop.BLL\\myshop.BLL.csproj"
+            "D:\\Project\\myshop.BLL\\myshop.BLL.csproj": {
+              "projectPath": "D:\\Project\\myshop.BLL\\myshop.BLL.csproj"
             }
           }
         }

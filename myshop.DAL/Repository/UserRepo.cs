@@ -21,13 +21,7 @@ namespace myshop.DAL.Repository
         {
                         return base.GetAll();
         }
-        public async Task<ApplicationUser> GetUserByEmail(string email)
-        {
-            var user = await dbSet.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null)
-                throw new NullReferenceException("User not found");
-            return user;
-        }
+        
         
     }
 }

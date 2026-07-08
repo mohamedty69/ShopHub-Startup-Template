@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Edit Users";
+}
+@model EditUserDTO
+<h1>Edit User</h1>
+<form asp-action="EditUser" class="form form-control" method="post">
+    <input type="hidden" asp-for="UserID" />
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="City"></label>
+        <input asp-for="City" class="form-control" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="Role"></label>
+    <select asp-for="Role" class="form-select" aria-label="Disabled select example">
+        <option value="Customer">Customer</option>
+        <option value="Admin">Admin</option>
+    </select>
+    <span asp-validation-for="Role" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="IsLocked"></label>
+        <input type="checkbox" asp-for="IsLocked" class="form-check-input" />
+        <span asp-validation-for="Role" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-secondary">Edit</button>
+</form>

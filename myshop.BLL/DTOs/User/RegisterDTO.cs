@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text;
 
-namespace myshop.BLL.DTOs
+namespace myshop.BLL.DTOs.User
 {
     public class RegisterDTO
     {

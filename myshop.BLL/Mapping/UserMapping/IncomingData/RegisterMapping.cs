@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using myshop.BLL.DTOs;
+using myshop.BLL.DTOs.User;
 using myshop.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace myshop.BLL.Mapping.UserMapping
+namespace myshop.BLL.Mapping.UserMapping.IncomingData
 {
     public class RegisterMapping : Profile
     {
