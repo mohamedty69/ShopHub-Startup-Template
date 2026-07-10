@@ -1,22 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using myshop.BLL.DTOs.Category;
+using myshop.BLL.IServices;
 using myshop.DataAccess;
 using myshop.Entities.Models;
 
-namespace myshop.Web.Areas.Admin.Controllers
+namespace myshop.Web.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(ApplicationDbContext context)
+        public CategoryController(ICategoryService categoryService)
         {
-            _context = context;
+            _categoryService = categoryService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            //var categories = _context.Categories.ToList();
-            return View(/*categories*/);
+            var listOfCategory = await _categoryService.GetCategoriesAsync();
+            return View(listOfCategory);
         }
 
         [HttpGet]
@@ -26,30 +30,27 @@ namespace myshop.Web.Areas.Admin.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public IActionResult Create(Category category)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        //_context./*Categories*/.Add(category);
-        //        _context.SaveChanges();
-        //        TempData["Create"] = "Item has Created Successfully";
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(category);
-        //}
+        [HttpPost]
+        public IActionResult Create(CategoryDTO categorydto)
+        {
+            if (ModelState.IsValid)
+            {
+                _categoryService.CreaetCategoryAsync(categorydto);
+            }
+            return View(categorydto);
+        }
 
-        //[HttpGet]
-        //public IActionResult Edit(int? id)
-        //{
-        //    if (id == null | id == 0)
-        //    {
-        //        NotFound();
-        //    }
-        //    var categoryIndb = _context.Categories.Find(id);
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (id == 0)
+            {
+                NotFound();
+            }
+            var category = await _categoryService.GetCategoryByIdAsync(id);
 
-        //    return View(categoryIndb);
-        //}
+            return View(category);
+        }
 
         //[HttpPost]
         //public IActionResult Edit(Category category)

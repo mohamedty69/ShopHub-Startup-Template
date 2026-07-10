@@ -146,5 +146,9 @@ namespace myshop.BLL.Services
             var user = await _userManager.FindByIdAsync(id) ?? throw new NullReferenceException("User Not Found");
             return await _userManager.SetLockoutEndDateAsync(user, null);
         }
+        public async Task LogOut()
+        {
+            await _signInManager.SignOutAsync();
+        }
     }
 }

@@ -70,6 +70,7 @@ namespace myshop.Web.Controllers
             else
                 return Json("User is not logged in");
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Role()
         {
@@ -112,6 +113,11 @@ namespace myshop.Web.Controllers
             var result = await _userService.DeleteUserAsync(id);
             if (result.Succeeded) return RedirectToAction("DisplayUsers");
             else return Json($"User is already deleted");
+        }
+        public async Task<IActionResult> LogOut()
+        {
+            await _userService.LogOut();
+            return RedirectToAction("Login");
         }
         public IActionResult Privacy()
         {

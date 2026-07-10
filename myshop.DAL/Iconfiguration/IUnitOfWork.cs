@@ -9,6 +9,7 @@ namespace myshop.DAL.Iconfiguration
     public interface IUnitOfWork
     {
         public IUserRepo Users { get; }
+        public ICategoryRepo Categories { get; }
         public Task CompleteTask();
     }
 }

@@ -31,12 +31,24 @@ builder.Services.AddAutoMapper(cfg => { },
 typeof(RegisterMapping),typeof(DisplayUserMapping));
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddHttpContextAccessor();
 
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var role = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    string[] roleNames = { "Admin", "Customer" };
+    foreach(var roleName in roleNames)
+    {
+        if (await role.RoleExistsAsync(roleName))
+            continue;
+        else await role.CreateAsync(new IdentityRole(roleName));
+    }
+}
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();

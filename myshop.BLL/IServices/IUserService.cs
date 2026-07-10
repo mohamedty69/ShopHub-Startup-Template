@@ -17,6 +17,7 @@ namespace myshop.BLL.IServices
         public Task<EditUserDTO> GetUserByIdAsync(string id);
         public Task<IdentityResult> DeleteUserAsync(string id);
         public Task<IdentityResult> UpdateUserAsync(EditUserDTO editUserDTO);
+        public Task LogOut();
 
 
 

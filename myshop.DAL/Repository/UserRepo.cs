@@ -13,15 +13,9 @@ namespace myshop.DAL.Repository
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<ApplicationUser> _dbSet;
-        public UserRepo(ApplicationDbContext context): base(context)
+        public UserRepo(ApplicationDbContext context) : base(context)
         {
-      
+            _context = context;
         }
-        public override Task<IEnumerable<ApplicationUser>> GetAll()
-        {
-                        return base.GetAll();
-        }
-        
-        
     }
 }
