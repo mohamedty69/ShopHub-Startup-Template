@@ -1,0 +1,7 @@
+# Prevent Git from corrupting web assets
+*.css  text
+*.js   text
+*.map  text
+*.json text
+*.html text
+*.cshtml text
