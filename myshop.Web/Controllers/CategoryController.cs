@@ -36,6 +36,7 @@ namespace myshop.Web.Controllers
             if (ModelState.IsValid)
             {
                 _categoryService.CreaetCategoryAsync(categorydto);
+                return RedirectToAction("Index");
             }
             return View(categorydto);
         }
@@ -52,45 +53,40 @@ namespace myshop.Web.Controllers
             return View(category);
         }
 
-        //[HttpPost]
-        //public IActionResult Edit(Category category)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Categories.Update(category);
+        [HttpPost]
+        public async Task<IActionResult> Edit(CategoryDTO categoryDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                await _categoryService.UpdateCategoryAsync(categoryDTO);
+                return RedirectToAction("Index");
+            }
+            return View(categoryDTO);
+        }
 
-        //        _context.SaveChanges();
-        //        TempData["Update"] = "Data has Updated Successfully";
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(category);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id == null | id == 0)
+            {
+                NotFound();
+            }
+            var cat = await _categoryService.GetCategoryByIdAsync(id);
+            return View(cat);
+        }
 
-        //[HttpGet]
-        //public IActionResult Delete(int? id)
-        //{
-        //    if (id == null | id == 0)
-        //    {
-        //        NotFound();
-        //    }
-        //    var categoryIndb = _context.Categories.Where(x => x.Id == id).FirstOrDefault();
-
-        //    return View(categoryIndb);
-        //}
-
-        //[HttpPost]
-        //public IActionResult DeleteCategory(int? id)
-        //{
-        //    var categoryIndb = _context.Categories.FirstOrDefault(x => x.Id == id);
-        //    if (categoryIndb == null)
-        //    {
-        //        NotFound();
-        //    }
-        //    _context.Categories.Remove(categoryIndb);
-        //    _context.SaveChanges();
-        //    TempData["Delete"] = "Item has Deleted Successfully";
-        //    return RedirectToAction("Index");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var categoryIndb = await _categoryService.GetCategoryByIdAsync(id);
+            if (categoryIndb == null)
+            {
+                NotFound();
+            }
+            await _categoryService.DeleteCategoryAsync(id);
+            TempData["Delete"] = "Item has Deleted Successfully";
+            return RedirectToAction("Index");
+        }
 
     }
 }

@@ -31,5 +31,20 @@ namespace myshop.DAL.Repository
         {
             return base.GetAll();
         }
+        public override async Task<bool> Update(Category entity)
+        {
+            var exsestingCategory = await _context.Categories.Where(c => c.Id == entity.Id).FirstOrDefaultAsync();
+            if (exsestingCategory != null)
+            {
+                exsestingCategory.Name = entity.Name;
+                exsestingCategory.Description = entity.Description;
+                return true;
+            }
+            return false;
+        }
+        public override Task<bool> Delete(int id)
+        {
+            return base.Delete(id);
+        }
     }
 }

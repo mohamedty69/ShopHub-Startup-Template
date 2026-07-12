@@ -45,6 +45,7 @@ packages/
 
 # Application configuration (development-specific)
 appsettings.json
+appsettings.Development.json
 appsettings.Production.json
 appsettings.Staging.json
 myshop.Web/appsettings.json

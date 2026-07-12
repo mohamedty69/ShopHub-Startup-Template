@@ -10,5 +10,7 @@ namespace myshop.BLL.IServices
         public Task<bool> CreaetCategoryAsync(CategoryDTO category);
         public Task<IEnumerable<CategoryDTO>> GetCategoriesAsync();
         public Task<CategoryDTO> GetCategoryByIdAsync(int id);
+        public Task<bool> UpdateCategoryAsync(CategoryDTO categoryDTO);
+        public Task DeleteCategoryAsync(int id);
     }
 }

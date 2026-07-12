@@ -24,7 +24,7 @@ namespace myshop.DAL.Repository
             return true;
         }
 
-        public async Task<bool> Delete(int id)
+        public virtual async Task<bool> Delete(int id)
         {
             var existuser = await dbSet.FindAsync(id);
             if (existuser == null)
@@ -47,12 +47,9 @@ namespace myshop.DAL.Repository
             return listOfUsers;
         }
 
-        public async Task<bool> Update(T entity)
+        public virtual async Task<bool> Update(T entity)
         {
-            var existUser = await dbSet.FindAsync(entity);
-            if (existUser == null)
-               await Add(entity);
-            return true;
+            throw new NotImplementedException();
         }
     }
 }

@@ -29,6 +29,13 @@ namespace myshop.BLL.Services
             }
             else throw new InvalidOperationException("The category can not created");
         }
+
+        public async Task DeleteCategoryAsync(int id)
+        {
+            await _unitOfWork.Categories.Delete(id);
+            await _unitOfWork.CompleteTask();
+        }
+
         public async Task<IEnumerable<CategoryDTO>> GetCategoriesAsync() 
         {
             var listOfCategory = await _unitOfWork.Categories.GetAll();
@@ -41,6 +48,18 @@ namespace myshop.BLL.Services
             var category = await _unitOfWork.Categories.FindCategoryByIdAsync(id);
             var mappedCategory = _mapper.Map<CategoryDTO>(category);
             return mappedCategory;
+        }
+
+        public async Task<bool> UpdateCategoryAsync(CategoryDTO categoryDTO)
+        {
+            var mappedCategory = _mapper.Map<Category>(categoryDTO);
+            var check = await _unitOfWork.Categories.Update(mappedCategory);
+            if (check)
+            { 
+                await _unitOfWork.CompleteTask();
+                return true;
+            }
+            return false;
         }
     }
 }
