@@ -1,4 +1,5 @@
-﻿@{
+﻿@* @model IEnumerable<DisplayProductDTO> *@
+@{
     ViewBag.PageTitle = "Products Management";
     ViewBag.CardTitle = "View Products";
     Layout = "~/Views/Shared/_Dashboard.cshtml";
@@ -127,6 +128,29 @@
                 <th style="width:130px;">Actions</th>
             </tr>
         </thead>
+        @* <tbody>
+            @foreach(var product in Model)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Description</td>
+                    <td>@product.Price.ToString("C")</td>
+                    <td>@product.CategoryName</td>
+                    <td>
+                        <a asp-controller="Product"
+                           asp-action="Edit"
+                           asp-route-id="@product.Id"
+                           class="btn btn-success action-btn me-1">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                        <button class="btn btn-danger action-btn delete-btn"
+                                data-id="@product.Id">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody> *@
     </table>
 
 </div>

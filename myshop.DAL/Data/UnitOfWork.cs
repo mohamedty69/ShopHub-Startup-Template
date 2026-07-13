@@ -15,8 +15,7 @@ namespace myshop.DAL.Data
     {
         public IUserRepo Users { get; private set; }
         public ICategoryRepo Categories { get; private set; }
-
-
+        public IProductRepo Products { get; private set; }
         private readonly ApplicationDbContext _context;
         public UnitOfWork(ApplicationDbContext context
             )
@@ -24,6 +23,7 @@ namespace myshop.DAL.Data
             _context = context;
             Users = new UserRepo(_context);
             Categories = new CategoryRepo(_context);
+            Products = new ProductRepo(_context);
         }
         public async Task CompleteTask()
         {

@@ -19,9 +19,10 @@
                             <i class="fa-solid fa-pen"></i>
                         </a>
 
-                        <button class="btn btn-danger btn-sm">
+                        <a href="/Product/Delete/${id}" class="btn btn-danger btn-sm">
                             <i class="fa-solid fa-trash"></i>
-                        </button>
+                        </a>
+                        
                     `;
                 }
             }

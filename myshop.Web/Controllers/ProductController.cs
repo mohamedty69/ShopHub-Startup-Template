@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using myshop.BLL.DTOs.Product;
+using myshop.BLL.IServices;
 using myshop.DataAccess;
 using myshop.Entities.Models;
 using myshop.Entities.ViewModels;
@@ -12,164 +14,135 @@ namespace myshop.Web.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICategoryService _categoryService;
+        private readonly IProductService _productService;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public ProductController(ICategoryService categoryService,IProductService productService, IWebHostEnvironment webHostEnvironment)
         {
-            _context = context;
+            _categoryService = categoryService;
+            _productService = productService;
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }
 
-        //[HttpGet]
-        //public IActionResult GetData()
-        //{
-        //    var products = _context.Products
-        //        .Include(x => x.Category)
-        //        .Select(x => new
-        //        {
-        //            id = x.Id,
-        //            name = x.Name,
-        //            description = x.Description,
-        //            price = x.Price,
-        //            categoryName = x.Category.Name
-        //        })
-        //        .ToList();
+        [HttpGet]
+        public async Task<IActionResult> GetData()
+        {
+            var listOfProducts = await _productService.GetAllProductsAsync();
+            return Json(new { data = listOfProducts });
+        }
 
-        //    return Json(new { data = products });
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            var product = new CreateProductDTO();
+            var cat= await _categoryService.GetCategoriesAsync();
+            product.categories = cat.ToList();
+            return View(product);
+        }
 
-        //[HttpGet]
-        //public IActionResult Create()
-        //{
-        //    ProductVM productVM = new ProductVM()
-        //    {
-        //        Product = new Product(),
-        //        CategoryList = _context.Categories.Select(x => new SelectListItem
-        //        {
-        //            Text = x.Name,
-        //            Value = x.Id.ToString()
-        //        })
-        //    };
-        //    return View(productVM);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateProductDTO productDTO, IFormFile file)
+        {
+            if (ModelState.IsValid)
+            {
+                string RootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string filename = Guid.NewGuid().ToString();
+                    var Upload = Path.Combine(RootPath, @"Images\Products");
+                    var ext = Path.GetExtension(file.FileName);
 
-        //[HttpPost]
-        //public IActionResult Create(ProductVM productVM,IFormFile file)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        string RootPath = _webHostEnvironment.WebRootPath;
-        //        if (file != null)
-        //        {
-        //            string filename = Guid.NewGuid().ToString();
-        //            var Upload = Path.Combine(RootPath, @"Images\Products");
-        //            var ext = Path.GetExtension(file.FileName);
+                    using (var filestream = new FileStream(Path.Combine(Upload, filename + ext), FileMode.Create))
+                    {
+                        file.CopyTo(filestream);
+                    }
+                    productDTO.Img = @"Images\Products\" + filename + ext;
+                }
+                var check = await _productService.AddProductAsync(productDTO);
+                if (check)
+                { 
+                    TempData["Create"] = "Product has been Created Successfully";
+                    return RedirectToAction("Index");
+                }
+                return View(productDTO);
+            }
+            return View(productDTO);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var product = await _productService.GetProductByIdAsync(id.Value);
+            var categories = await _categoryService.GetCategoriesAsync();
+            product.categories = categories.ToList();
+            return View(product);
+        }
 
-        //            using (var filestream = new FileStream(Path.Combine(Upload,filename+ext),FileMode.Create))
-        //            {
-        //                file.CopyTo(filestream);
-        //            }
-        //            productVM.Product.Img = @"Images\Products\" + filename + ext;
-        //        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditProductDTO editProductDTO, IFormFile? file)
+        {
+            if (ModelState.IsValid)
+            {
+                string RootPath = _webHostEnvironment.WebRootPath;
 
-        //        _context.Products.Add(productVM.Product);
-        //        _context.SaveChanges();
-        //        TempData["Create"] = "Item has Created Successfully";
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(productVM.Product);
-        //}
-        //[HttpGet]
-        //public IActionResult Edit(int? id)
-        //{
-        //    if (id == null || id == 0)
-        //    {
-        //        return NotFound();
-        //    }
+                if (file != null)
+                {
+                    string filename = Guid.NewGuid().ToString();
+                    var Upload = Path.Combine(RootPath, @"Images\Products");
+                    var ext = Path.GetExtension(file.FileName);
 
-        //    ProductVM productVM = new ProductVM()
-        //    {
-        //        Product = _context.Products.FirstOrDefault(x => x.Id == id),
-        //        CategoryList = _context.Categories.Select(x => new SelectListItem
-        //        {
-        //            Text = x.Name,
-        //            Value = x.Id.ToString()
-        //        })
-        //    };
+                    if (editProductDTO.Img != null)
+                    {
+                        var oldimg = Path.Combine(RootPath, editProductDTO.Img.TrimStart('\\'));
 
-        //    return View(productVM);
-        //}
+                        if (System.IO.File.Exists(oldimg))
+                        {
+                            System.IO.File.Delete(oldimg);
+                        }
+                    }
 
-        //[HttpPost]
-        //public IActionResult Edit(ProductVM productVM, IFormFile? file)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        string RootPath = _webHostEnvironment.WebRootPath;
+                    using (var filestream = new FileStream(Path.Combine(Upload, filename + ext), FileMode.Create))
+                    {
+                        file.CopyTo(filestream);
+                    }
 
-        //        if (file != null)
-        //        {
-        //            string filename = Guid.NewGuid().ToString();
-        //            var Upload = Path.Combine(RootPath, @"Images\Products");
-        //            var ext = Path.GetExtension(file.FileName);
+                    editProductDTO.Img = @"Images\Products\" + filename + ext;
+                }
+                var result = await _productService.UpdateProductAsync(editProductDTO);
+                TempData["Update"] = "Data has Updated Successfully";
+                return RedirectToAction("Index");
+            }
 
-        //            if (productVM.Product.Img != null)
-        //            {
-        //                var oldimg = Path.Combine(RootPath, productVM.Product.Img.TrimStart('\\'));
-
-        //                if (System.IO.File.Exists(oldimg))
-        //                {
-        //                    System.IO.File.Delete(oldimg);
-        //                }
-        //            }
-
-        //            using (var filestream = new FileStream(Path.Combine(Upload, filename + ext), FileMode.Create))
-        //            {
-        //                file.CopyTo(filestream);
-        //            }
-
-        //            productVM.Product.Img = @"Images\Products\" + filename + ext;
-        //        }
-
-        //        _context.Products.Update(productVM.Product);
-        //        _context.SaveChanges();
-
-        //        TempData["Update"] = "Data has Updated Successfully";
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    return View(productVM.Product);
-        //}
-
-        //[HttpDelete]
-        //public IActionResult Delete(int? id)
-        //{
-        //    var productIndb = _context.Products.FirstOrDefault(x => x.Id == id);
-
-        //    if (productIndb == null)
-        //    {
-        //        return Json(new { success = false, message = "Error while Deleting" });
-        //    }
-
-        //    _context.Products.Remove(productIndb);
-
-        //    var oldimg = Path.Combine(_webHostEnvironment.WebRootPath, productIndb.Img.TrimStart('\\'));
-
-        //    if (System.IO.File.Exists(oldimg))
-        //    {
-        //        System.IO.File.Delete(oldimg);
-        //    }
-
-        //    _context.SaveChanges();
-
-        //    return Json(new { success = true, message = "file has been Deleted" });
-        //}
+            return View(editProductDTO);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var product = await _productService.GetProductByIdAsync(id);
+            if (product != null)
+            {
+                var check = await _productService.DeleteProductAsync(id);
+                if (check)
+                { 
+                    var oldimg = Path.Combine(_webHostEnvironment.WebRootPath, product.Img.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldimg))
+                    {
+                        System.IO.File.Delete(oldimg);
+                    }
+                    return Json(new { success = true, message = "file has been Deleted" });
+                }
+            }
+            return Json(new { success = false, message = "Error while Deleting" });
+        }
 
 
     }

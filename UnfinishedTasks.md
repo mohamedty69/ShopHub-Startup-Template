@@ -51,18 +51,18 @@ After thorough examination of the project, here is the status of each task:
 
 #### **INCOMPLETE ITEMS:**
 
-- [ ] **ProductController must use a Service/Repository** instead of accessing DbContext directly
-- [ ] **CategoryController must use a Service/Repository** instead of accessing DbContext directly
-- [ ] Create **ICategoryService** and **CategoryService** implementation
-- [ ] Create **IProductService** and **ProductService** implementation
-- [ ] Create **ProductRepository** and implement **IProductRepo**
-- [ ] Create **CategoryRepository** and implement **ICategoryRepo**
-- [ ] Update **UnitOfWork** to expose Products and Categories repositories
-- [ ] Refactor Product and Category CRUD operations into services
-- [ ] Uncomment and migrate Product CRUD operations to use services
-- [ ] Uncomment and migrate Category CRUD operations to use services
-- [ ] Create AutoMapper profiles for Product and Category DTOs
-- [ ] Create ProductDTO and CategoryDTO classes
+- [x] **ProductController must use a Service/Repository** instead of accessing DbContext directly
+- [x] **CategoryController must use a Service/Repository** instead of accessing DbContext directly
+- [x] Create **ICategoryService** and **CategoryService** implementation
+- [x] Create **IProductService** and **ProductService** implementation
+- [x] Create **ProductRepository** and implement **IProductRepo**
+- [x] Create **CategoryRepository** and implement **ICategoryRepo**
+- [x] Update **UnitOfWork** to expose Products and Categories repositories
+- [x] Refactor Product and Category CRUD operations into services
+- [x] Uncomment and migrate Product CRUD operations to use services
+- [x] Uncomment and migrate Category CRUD operations to use services
+- [x] Create AutoMapper profiles for Product and Category DTOs
+- [x] Create ProductDTO and CategoryDTO classes
 
 ---
 
@@ -108,16 +108,16 @@ After thorough examination of the project, here is the status of each task:
 
 #### **INCOMPLETE ITEMS:**
 
-- [ ] Implement **Logout functionality** in UserServices
-- [ ] Create **role seeding logic** in Program.cs (Admin and Customer roles)
-- [ ] Add **[Authorize(Roles = "Admin")]** to CategoryController
-- [ ] Add **[Authorize(Roles = "Admin")]** to Product CRUD actions
-- [ ] Add **[Authorize(Roles = "Admin")]** to Category CRUD actions
-- [ ] Add **[Authorize(Roles = "Admin")]** to HomeController admin methods (DisplayUsers, EditUser, Role)
-- [ ] Add **Logout** endpoint and view to HomeController
+- [x] Implement **Logout functionality** in UserServices
+- [x] Create **role seeding logic** in Program.cs (Admin and Customer roles)
+- [x] Add **[Authorize(Roles = "Admin")]** to CategoryController
+- [x] Add **[Authorize(Roles = "Admin")]** to Product CRUD actions
+- [x] Add **[Authorize(Roles = "Admin")]** to Category CRUD actions
+- [x] Add **[Authorize(Roles = "Admin")]** to HomeController admin methods (DisplayUsers, EditUser, Role)
+- [x] Add **Logout** endpoint and view to HomeController
 - [ ] Implement **custom authorization policy** (for policy-based authorization)
-- [ ] Configure **unauthorized redirect** to redirect to login page
-- [ ] Add logout button to **_Layout.cshtml** or **_LoginPartial.cshtml**
+- [x] Configure **unauthorized redirect** to redirect to login page
+- [x] Add logout button to **_Layout.cshtml** or **_LoginPartial.cshtml**
 
 ---
 
@@ -155,11 +155,11 @@ After thorough examination of the project, here is the status of each task:
 
 #### **INCOMPLETE ITEMS:**
 
-- [ ] Add **[Authorize(Roles = "Admin")]** to DisplayUsers action
-- [ ] Add **[Authorize(Roles = "Admin")]** to EditUser action (both GET and POST)
-- [ ] Add **[Authorize(Roles = "Admin")]** to DeleteUser action
-- [ ] Add **[Authorize(Roles = "Admin")]** to Role action (GET and POST)
-- [ ] Add **[Authorize(Roles = "Admin")]** to Roles action
+- [x] Add **[Authorize(Roles = "Admin")]** to DisplayUsers action
+- [x] Add **[Authorize(Roles = "Admin")]** to EditUser action (both GET and POST)
+- [x] Add **[Authorize(Roles = "Admin")]** to DeleteUser action
+- [x] Add **[Authorize(Roles = "Admin")]** to Role action (GET and POST)
+- [x] Add **[Authorize(Roles = "Admin")]** to Roles action
 - [ ] Verify that DeleteUser prevents self-deletion (prevent admin from deleting their own account)
 - [ ] Add authorization check to prevent deleting the last admin
 

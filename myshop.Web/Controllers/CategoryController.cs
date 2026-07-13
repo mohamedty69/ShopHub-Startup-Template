@@ -31,11 +31,11 @@ namespace myshop.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CategoryDTO categorydto)
+        public async Task<IActionResult> Create(CategoryDTO categorydto)
         {
             if (ModelState.IsValid)
             {
-                _categoryService.CreaetCategoryAsync(categorydto);
+                await _categoryService.CreaetCategoryAsync(categorydto);
                 return RedirectToAction("Index");
             }
             return View(categorydto);

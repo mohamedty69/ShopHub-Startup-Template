@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using myshop.BLL.IServices;
+using myshop.BLL.Mapping.ProductMapping.IncomingData;
+using myshop.BLL.Mapping.ProductMapping.OutgoingData;
 using myshop.BLL.Mapping.UserMapping.IncomingData;
 using myshop.BLL.Mapping.UserMapping.OutgoingData;
 using myshop.BLL.Services;
@@ -28,12 +30,21 @@ builder.Services.AddIdentity<ApplicationUser,IdentityRole>(
 
 
 builder.Services.AddAutoMapper(cfg => { },
-typeof(RegisterMapping),typeof(DisplayUserMapping));
+typeof(RegisterMapping),typeof(DisplayUserMapping),
+typeof(CreateProductProfile),typeof(DisplayProductProfile),
+typeof(EditProductProfile));
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, myshop.BLL.Services.ProductService>();
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Home/Login";
+
+    options.AccessDeniedPath = "/Home/AccessDenied";
+});
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();

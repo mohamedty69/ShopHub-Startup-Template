@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using myshop.BLL.DTOs.User;
@@ -112,12 +112,16 @@ namespace myshop.Web.Controllers
         {
             var result = await _userService.DeleteUserAsync(id);
             if (result.Succeeded) return RedirectToAction("DisplayUsers");
-            else return Json($"User is already deleted");
+            else return Json(result.Errors.FirstOrDefault()?.Description ?? "Failed to delete user.");
         }
         public async Task<IActionResult> LogOut()
         {
             await _userService.LogOut();
             return RedirectToAction("Login");
+        }
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
         public IActionResult Privacy()
         {

@@ -1,5 +1,6 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 using myshop.BLL.DTOs.User;
 using myshop.BLL.IServices;
 using myshop.DAL.Iconfiguration;
@@ -17,16 +18,19 @@ namespace myshop.BLL.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
         public UserServices(IMapper mapper, IUnitOfWork unitOfWork,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager
-            , RoleManager<IdentityRole> roleManager)
+            , RoleManager<IdentityRole> roleManager
+            , IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<IdentityResult> RegisterAsync(RegisterDTO registerDTO)
         {
@@ -119,6 +123,23 @@ namespace myshop.BLL.Services
         public async Task<IdentityResult> DeleteUserAsync(string id) 
         {
             var user = await _userManager.FindByIdAsync(id) ?? throw new NullReferenceException("User Not Found");
+
+            var currentUserId = _httpContextAccessor.HttpContext?.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (currentUserId == id)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "You cannot delete your own account." });
+            }
+
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            if (isAdmin)
+            {
+                var adminUsers = await _userManager.GetUsersInRoleAsync("Admin");
+                if (adminUsers.Count <= 1)
+                {
+                    return IdentityResult.Failed(new IdentityError { Description = "You cannot delete the last remaining Admin account." });
+                }
+            }
+
             return await _userManager.DeleteAsync(user);
         }
         public async Task<IdentityResult> ChangeRoleAsync(EditUserDTO editUserDTO)
