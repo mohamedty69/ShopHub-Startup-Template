@@ -1,0 +1,18 @@
+﻿@model List<CartItem>
+@{
+    Layout = "_Customer";
+}
+@foreach(var product in Model)
+{   
+<div class="card-deck">
+    <div class="card">
+        <img src="/@product.ImgUrl" class="card-img-top" alt="..." style="width:150px;height:150px">
+        <div class="card-body">
+            <h5 class="card-title">@product.ProductName</h5>
+            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <p class="card-text"><small class="text-muted">@product.Price</small></p>
+            <p>Quantity: <b>@product.Quantity</b></p>
+        </div>
+    </div>
+</div>
+}

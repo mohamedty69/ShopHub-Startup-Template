@@ -122,8 +122,8 @@
     </style>
 </head>
 <body>
-    @{
-        int cartCount = 0;
+     @{
+        // int cartCount = 0;
         // if (User.Identity.IsAuthenticated)
         // {
         //     var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
@@ -133,14 +133,14 @@
         //         cartCount = _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == userId).Count();
         //     }
         // }
-    }
+    } 
 
     <nav class="navbar navbar-expand-lg">
-        <div class="container">
+          <div class="container">
             <a class="navbar-brand text-primary" href="/Customer/Home/Index">myShop</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
-            </button>
+            </button> 
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -148,17 +148,12 @@
                         <a class="nav-link-box home-box nav-link active" href="/Customer/Home/Index">Home</a>
                     </li>
 
-                @*     @if (User.Identity.IsAuthenticated)
-                    {
-                        @if (User.IsInRole(SD.AdminRole))
-                        {
+                    
                             <li class="nav-item">
                                 <!-- تم إضافة home-box هنا -->
                                 <a class="nav-link-box home-box nav-link" href="/Admin/Dashboard/Index">Dashboard</a>
                             </li>
-                        }
-                        else
-                        {
+                        
                             <li class="nav-item dropdown">
                                 <a class="nav-link-box nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown">My Setting</a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -167,9 +162,8 @@
                                     <li><a class="dropdown-item" href="/Identity/Account/Manage">Edit Profile</a></li>
                                 </ul>
                             </li>
-                        }
-                    }
-                </ul> *@
+                       
+                </ul>
 
                 <div class="nav-link-box">
                     <partial name="_LoginPartial" />
@@ -178,10 +172,10 @@
                 <a href="/Customer/Cart/Index" class="nav-link-box cart-btn">
                     <i class="bi bi-cart-fill"></i>
                     Cart
-                    <span id="cart-count" class="badge bg-dark text-white rounded-pill">@cartCount</span>
+                    <span id="cart-count" class="badge bg-dark text-white rounded-pill">cartCount</span>
                 </a>
             </div>
-        </div>
+        </div> 
     </nav>
 
     <header class="hero text-white text-center">

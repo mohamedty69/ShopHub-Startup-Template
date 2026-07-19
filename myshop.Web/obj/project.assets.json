@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net10.0": {
       "AutoMapper/16.2.0": {
@@ -3653,23 +3653,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\afndy\\.nuget\\packages\\": {},
+    "C:\\Users\\hamom\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Project_Shop\\myshop.Web\\myshop.PL.csproj",
+      "projectUniqueName": "D:\\Project\\myshop.Web\\myshop.PL.csproj",
       "projectName": "myshop.PL",
-      "projectPath": "C:\\Project_Shop\\myshop.Web\\myshop.PL.csproj",
-      "packagesPath": "C:\\Users\\afndy\\.nuget\\packages\\",
-      "outputPath": "C:\\Project_Shop\\myshop.Web\\obj\\",
+      "projectPath": "D:\\Project\\myshop.Web\\myshop.PL.csproj",
+      "packagesPath": "C:\\Users\\hamom\\.nuget\\packages\\",
+      "outputPath": "D:\\Project\\myshop.Web\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\afndy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\hamom\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3682,10 +3682,11 @@
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Project_Shop\\myshop.BLL\\myshop.BLL.csproj": {
-              "projectPath": "C:\\Project_Shop\\myshop.BLL\\myshop.BLL.csproj"
+            "D:\\Project\\myshop.BLL\\myshop.BLL.csproj": {
+              "projectPath": "D:\\Project\\myshop.BLL\\myshop.BLL.csproj"
             }
           }
         }
@@ -3700,10 +3701,11 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.100"
+      "SdkAnalysisLevel": "10.0.300"
     },
     "frameworks": {
       "net10.0": {
+        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "Microsoft.AspNetCore.Identity.UI": {
@@ -3762,7 +3764,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

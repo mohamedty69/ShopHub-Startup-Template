@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\User\**" />
+    <Content Remove="Views\User\**" />
+    <EmbeddedResource Remove="Views\User\**" />
+    <None Remove="Views\User\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\css\adminlte.css.map" />
     <None Include="wwwroot\css\adminlte.min.css.map" />
     <None Include="wwwroot\css\alt\adminlte.components.css.map" />
@@ -110,7 +117,6 @@
 
   <ItemGroup>
     <Folder Include="Views\Shared\Components\" />
-    <Folder Include="Views\User\" />
     <Folder Include="wwwroot\Images\Products\" />
     <Folder Include="wwwroot\NewFolder\" />
   </ItemGroup>

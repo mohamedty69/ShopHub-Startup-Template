@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using myshop.BLL.DTOs.Category;
 using myshop.BLL.IServices;
-using myshop.DataAccess;
-using myshop.Entities.Models;
 
 namespace myshop.Web.Controllers
 {
@@ -67,7 +65,7 @@ namespace myshop.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            if (id == null | id == 0)
+            if (id == 0)
             {
                 NotFound();
             }

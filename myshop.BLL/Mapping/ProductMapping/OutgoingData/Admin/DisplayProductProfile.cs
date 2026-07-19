@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using myshop.BLL.DTOs.Product;
+using myshop.BLL.DTOs.Product.Admin;
 using myshop.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace myshop.BLL.Mapping.ProductMapping.OutgoingData
+namespace myshop.BLL.Mapping.ProductMapping.OutgoingData.Admin
 {
     public class DisplayProductProfile : Profile
     {

@@ -49,7 +49,13 @@ namespace myshop.DAL.Repository
 
         public virtual async Task<bool> Update(T entity)
         {
-            throw new NotImplementedException();
+            var existing = await dbSet.FindAsync(entity);
+            if (existing != null)
+            { 
+                dbSet.Update(existing);
+                return true;
+            }
+            return false;
         }
     }
 }

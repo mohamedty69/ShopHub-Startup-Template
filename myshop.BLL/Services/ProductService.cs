@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
-using myshop.BLL.DTOs.Product;
+using Azure.Core.Serialization;
+using Microsoft.AspNetCore.Http;
+using myshop.BLL.DTOs.Cart;
+using myshop.BLL.DTOs.Product.Admin;
+using myshop.BLL.DTOs.Product.Customer;
 using myshop.BLL.IServices;
 using myshop.DAL.Iconfiguration;
-using myshop.DAL.IRepository;
 using myshop.Entities.Models;
+using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Text;
+using System.Text.Json;
 
 namespace myshop.BLL.Services
 {
@@ -15,12 +17,14 @@ namespace myshop.BLL.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ProductService(IUnitOfWork unitOfWork,IMapper mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ProductService(IUnitOfWork unitOfWork,IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
-
+        
         public async Task<bool> AddProductAsync(CreateProductDTO productDTO)
         {
             var mappedProduct = _mapper.Map<CreateProductDTO, Product>(productDTO);
@@ -64,6 +68,80 @@ namespace myshop.BLL.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<IEnumerable<DisplayAllProducts>> GetAllProductsForCustomersAsync()
+        {
+            try
+            {
+                var listOfProductForCustomers = await _unitOfWork.Products.GetAll();
+                var mappedList = _mapper.Map<IEnumerable<DisplayAllProducts>>(listOfProductForCustomers);
+                return mappedList;
+            }
+            catch (Exception ex)
+            {
+                throw new NullReferenceException(ex.Message);
+            }
+        }
+
+        public async Task<bool> AddProductToCartAsync(int id)
+        {
+            try
+            {
+                var product = await _unitOfWork.Products.GetById(id);
+                var mappedProduct = _mapper.Map<CartItem>(product);
+                var check = _httpContextAccessor.HttpContext.Session.GetString("Customer Product");
+                if (string.IsNullOrEmpty(check))
+                {
+                    List<CartItem> listOfItems = new List<CartItem>();
+                    mappedProduct.Quantity = 1;
+                    listOfItems.Add(mappedProduct);
+                    var jsonProduct = JsonSerializer.Serialize(listOfItems);
+                    _httpContextAccessor.HttpContext.Session.SetString("Customer Product", jsonProduct);
+                }
+                else
+                {
+                    var deserializedListOfProducts = JsonSerializer.Deserialize<List<CartItem>>(check) ?? throw new NullReferenceException();
+                    var exstPtoduct = deserializedListOfProducts.FirstOrDefault(p => p.ProductId == mappedProduct.ProductId);
+                    if (exstPtoduct != null)
+                    {
+                        var index = deserializedListOfProducts.IndexOf(exstPtoduct);
+                        exstPtoduct.Quantity++;
+                        deserializedListOfProducts[index] = exstPtoduct;
+                    }
+                    else
+                    {
+                        mappedProduct.Quantity = 1;
+                        deserializedListOfProducts.Add(mappedProduct);
+                    }
+                    var serializeListOfProducts = JsonSerializer.Serialize(deserializedListOfProducts);
+                    _httpContextAccessor.HttpContext.Session.SetString("Customer Product", serializeListOfProducts);
+
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new NullReferenceException(ex.Message);
+            }
+        }
+
+        public IEnumerable<CartItem> GetCartItems()
+        {
+            try
+            {
+                var jsonCartItems = _httpContextAccessor.HttpContext.Session.GetString("Customer Product");
+                if(!string.IsNullOrEmpty(jsonCartItems))
+                {
+                    var deserializedListOfItems = JsonSerializer.Deserialize<IEnumerable<CartItem>>(jsonCartItems);
+                    return deserializedListOfItems?? throw new NullReferenceException();
+                }
+                throw new NullReferenceException("Add items to cart first");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception( ex.Message);
+            }
         }
     }
 }

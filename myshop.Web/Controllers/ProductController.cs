@@ -1,27 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using myshop.BLL.DTOs.Product;
+using myshop.BLL.DTOs.Product.Admin;
 using myshop.BLL.IServices;
-using myshop.DataAccess;
-using myshop.Entities.Models;
-using myshop.Entities.ViewModels;
 
-namespace myshop.Web.Areas.Admin.Controllers
+namespace myshop.Web.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
         private readonly ICategoryService _categoryService;
         private readonly IProductService _productService;
+        private readonly IFileService _fileService;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(ICategoryService categoryService,IProductService productService, IWebHostEnvironment webHostEnvironment)
+        public ProductController(ICategoryService categoryService,
+            IProductService productService,
+            IFileService fileService,
+            IWebHostEnvironment webHostEnvironment)
         {
             _categoryService = categoryService;
             _productService = productService;
+            _fileService = fileService;
             _webHostEnvironment = webHostEnvironment;
         }
 
@@ -52,25 +51,20 @@ namespace myshop.Web.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 string RootPath = _webHostEnvironment.WebRootPath;
-                if (file != null)
-                {
-                    string filename = Guid.NewGuid().ToString();
-                    var Upload = Path.Combine(RootPath, @"Images\Products");
-                    var ext = Path.GetExtension(file.FileName);
-
-                    using (var filestream = new FileStream(Path.Combine(Upload, filename + ext), FileMode.Create))
-                    {
-                        file.CopyTo(filestream);
+                var imagePath = await _fileService.SaveFileAsync(file, RootPath);
+                try { 
+                    productDTO.Img = imagePath;
+                    var check = await _productService.AddProductAsync(productDTO);
+                    if (check)
+                    { 
+                        TempData["Create"] = "Product has been Created Successfully";
+                        return RedirectToAction("Index");
                     }
-                    productDTO.Img = @"Images\Products\" + filename + ext;
                 }
-                var check = await _productService.AddProductAsync(productDTO);
-                if (check)
+                catch 
                 { 
-                    TempData["Create"] = "Product has been Created Successfully";
-                    return RedirectToAction("Index");
+                    return View(productDTO);
                 }
-                return View(productDTO);
             }
             return View(productDTO);
         }
@@ -96,26 +90,13 @@ namespace myshop.Web.Areas.Admin.Controllers
 
                 if (file != null)
                 {
-                    string filename = Guid.NewGuid().ToString();
-                    var Upload = Path.Combine(RootPath, @"Images\Products");
-                    var ext = Path.GetExtension(file.FileName);
-
                     if (editProductDTO.Img != null)
                     {
                         var oldimg = Path.Combine(RootPath, editProductDTO.Img.TrimStart('\\'));
-
-                        if (System.IO.File.Exists(oldimg))
-                        {
-                            System.IO.File.Delete(oldimg);
-                        }
+                        _fileService.DeleteFile(oldimg);
                     }
-
-                    using (var filestream = new FileStream(Path.Combine(Upload, filename + ext), FileMode.Create))
-                    {
-                        file.CopyTo(filestream);
-                    }
-
-                    editProductDTO.Img = @"Images\Products\" + filename + ext;
+                    var imagePath = await _fileService.SaveFileAsync(file, RootPath);
+                    editProductDTO.Img = imagePath;
                 }
                 var result = await _productService.UpdateProductAsync(editProductDTO);
                 TempData["Update"] = "Data has Updated Successfully";
@@ -133,11 +114,8 @@ namespace myshop.Web.Areas.Admin.Controllers
                 var check = await _productService.DeleteProductAsync(id);
                 if (check)
                 { 
-                    var oldimg = Path.Combine(_webHostEnvironment.WebRootPath, product.Img.TrimStart('\\'));
-                    if (System.IO.File.Exists(oldimg))
-                    {
-                        System.IO.File.Delete(oldimg);
-                    }
+                    var oldimg = Path.Combine(_webHostEnvironment.WebRootPath, product.Img);
+                    _fileService.DeleteFile(oldimg);
                     return Json(new { success = true, message = "file has been Deleted" });
                 }
             }

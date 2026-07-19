@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using myshop.BLL.DTOs.User;
 using myshop.BLL.IServices;
 using myshop.Entities.Models;
-using System.ComponentModel.Design;
 using System.Diagnostics;
 
 namespace myshop.Web.Controllers
@@ -65,7 +63,7 @@ namespace myshop.Web.Controllers
                 {
                     return RedirectToAction("Index", "Product");
                 }
-                return PartialView("_LoginPartial"); ;
+                return RedirectToAction("DisplayProducts", "Customer");
             }
             else
                 return Json("User is not logged in");

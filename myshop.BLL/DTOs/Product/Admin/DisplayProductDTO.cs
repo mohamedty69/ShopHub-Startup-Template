@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace myshop.BLL.DTOs.Product
+namespace myshop.BLL.DTOs.Product.Admin
 {
     public class DisplayProductDTO
     {

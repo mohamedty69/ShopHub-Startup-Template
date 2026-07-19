@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using myshop.BLL.IServices;
 using myshop.BLL.Mapping.ProductMapping.IncomingData;
-using myshop.BLL.Mapping.ProductMapping.OutgoingData;
+using myshop.BLL.Mapping.ProductMapping.IncomingData.Admin;
+using myshop.BLL.Mapping.ProductMapping.OutgoingData.Admin;
+using myshop.BLL.Mapping.ProductMapping.OutgoingData.Customer;
 using myshop.BLL.Mapping.UserMapping.IncomingData;
 using myshop.BLL.Mapping.UserMapping.OutgoingData;
 using myshop.BLL.Services;
@@ -32,7 +34,9 @@ builder.Services.AddIdentity<ApplicationUser,IdentityRole>(
 builder.Services.AddAutoMapper(cfg => { },
 typeof(RegisterMapping),typeof(DisplayUserMapping),
 typeof(CreateProductProfile),typeof(DisplayProductProfile),
-typeof(EditProductProfile));
+typeof(EditProductProfile),typeof(UpdateProductProfile)
+,typeof(DisplayProductForCustomerProfile));
+builder.Services.AddScoped<IFileService, myshop.BLL.Services.FileService>();
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -45,8 +49,14 @@ builder.Services.ConfigureApplicationCookie(options =>
 
     options.AccessDeniedPath = "/Home/AccessDenied";
 });
-
 builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(opt =>
+  { 
+      opt.IdleTimeout = TimeSpan.FromMinutes(30);
+      opt.Cookie.HttpOnly = true;
+      opt.Cookie.IsEssential = true;
+  }
+);
 builder.Services.AddSession();
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())

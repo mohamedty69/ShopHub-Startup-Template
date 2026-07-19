@@ -69,7 +69,6 @@ namespace myshop.BLL.Services
             {
                 throw new Exception(ex.Message);
             }
-
         }
 
         public async Task<string> GetRoleAsync(LoginDTO log)
