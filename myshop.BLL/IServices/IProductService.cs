@@ -13,7 +13,6 @@ namespace myshop.BLL.IServices
         public Task<bool> AddProductToCartAsync(int id);
         public Task<IEnumerable<DisplayProductDTO>> GetAllProductsAsync();
         public Task<IEnumerable<DisplayAllProducts>> GetAllProductsForCustomersAsync();
-        public IEnumerable<CartItem> GetCartItems();
         public Task<bool> UpdateProductAsync(EditProductDTO productDTO);
         public Task<EditProductDTO> GetProductByIdAsync(int id);
         public Task<bool> DeleteProductAsync(int id);

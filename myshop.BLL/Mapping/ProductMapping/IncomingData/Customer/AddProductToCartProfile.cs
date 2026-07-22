@@ -12,11 +12,12 @@ namespace myshop.BLL.Mapping.ProductMapping.IncomingData.Customer
     {
         public AddProductToCartProfile()
         {
-            CreateMap < Product, CartItem>()
+            CreateMap<Product, CartItem>()
                 .ForMember(destinationMember: dest => dest.ProductId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(destinationMember: dest => dest.ProductName, opt => opt.MapFrom(src => src.Name))
                 .ForMember(destinationMember: dest => dest.ImgUrl, opt => opt.MapFrom(src => src.Img.Replace('\\', '/')))
-                .ForMember(destinationMember: dest => dest.Price, opt => opt.MapFrom(src => src.Price));
+                .ForMember(destinationMember: dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
         }
     }
 }

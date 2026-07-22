@@ -125,23 +125,5 @@ namespace myshop.BLL.Services
                 throw new NullReferenceException(ex.Message);
             }
         }
-
-        public IEnumerable<CartItem> GetCartItems()
-        {
-            try
-            {
-                var jsonCartItems = _httpContextAccessor.HttpContext.Session.GetString("Customer Product");
-                if(!string.IsNullOrEmpty(jsonCartItems))
-                {
-                    var deserializedListOfItems = JsonSerializer.Deserialize<IEnumerable<CartItem>>(jsonCartItems);
-                    return deserializedListOfItems?? throw new NullReferenceException();
-                }
-                throw new NullReferenceException("Add items to cart first");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception( ex.Message);
-            }
-        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using myshop.BLL.IServices;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace myshop.BLL.Services
     {
         public bool DeleteFile(string pathRoute)
         {
+            
             if (System.IO.File.Exists(pathRoute))
             {
                 File.Delete(pathRoute);

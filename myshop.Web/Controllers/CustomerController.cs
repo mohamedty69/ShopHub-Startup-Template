@@ -11,28 +11,62 @@ namespace myshop.PL.Controllers
     {
         private readonly IUserService _userService;
         private readonly IProductService _productService;
-        public CustomerController(IUserService userService, IProductService productService)
+        private readonly ICartService _cartService;
+        public CustomerController(IUserService userService, IProductService productService,
+            ICartService cartService)
         {
             _userService= userService;
             _productService = productService;
+            _cartService = cartService;
         }
         [HttpGet]
         public async Task<IActionResult> DisplayProducts()
         {
+            return View();
+        }
+        public async Task<IActionResult> DisplayProduct()
+        {
             var listOfProducts = await _productService.GetAllProductsForCustomersAsync();
-            return View(listOfProducts);
+            return Json(listOfProducts);
         }
         public async Task<IActionResult> AddItemToCart(int id)
         {
-            var result = await _productService.AddProductToCartAsync(id);
+            var result = await _cartService.AddProductToCartAsync(id);
             if (result)
                 return RedirectToAction("DisplayProducts");
             return Json("Can not add item to cart");
         }
         public IActionResult DisplayItem()
         {
-            var items = _productService.GetCartItems();
+            var items = _cartService.GetCartItems();
+                
             return View(items);
+        }
+        public async Task<IActionResult> RemoveItem(int id)
+        {
+            var result = await _cartService.RemoveItemFromCartAsync(id);
+            if (result)
+                return RedirectToAction("DisplayItem");
+            return Json("The item can not be found");
+        }
+        public IActionResult IncreaseItem(int id)
+        {
+            var result = _cartService.IncreaseQuantityOfItemAsync(id);
+            if (result)
+                return RedirectToAction("DisplayItem");
+            return Json("Failed to increase item");
+        }
+        public async Task<IActionResult> DecreaseItem(int id)
+        {
+            var result = await _cartService.DecreaseQuantityOfItemAsync(id);
+            if (result)
+                return RedirectToAction("DisplayItem");
+            return Json("Failed to decrease item");
+        }
+        public IActionResult DeleteCustomerCart()
+        {
+            var result = _cartService.DeleteCart();
+            return RedirectToAction("DisplayProducts");
         }
     }
 }
