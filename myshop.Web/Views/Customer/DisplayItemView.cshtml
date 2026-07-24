@@ -2,10 +2,9 @@
     Layout = "_Customer";
 }
 <a href="/Customer/DeleteCustomerCart" class="btn btn-danger alert-danger">Delete Cart</a>
-<h2 id ="totalprice"></h2> 
 <button onclick="DisplayItems()" accesskey="" class="btn btn-success">Display Items</button>
+<h2 id ="totalprice"></h2> 
 <div id="DisplayItems" class="card-deck">
-  
 </div>
 @section Scripts {
     <script>
@@ -16,9 +15,18 @@
                     url : "/Customer/DisplayItem",
                     method : "GET",
                     success: function(result){
-                        console.log(result);
+                        if(result.length == 0)
+                        {
+                            console.log(result)
+                            document.getElementById("DisplayItems").innerHTML+=
+                            `<h1>Please add items to cart first</h1>`
+                        }
+                        else
+                        {
+                        var totalOrderPrice = 0;
                         for(product of result)
                         {
+                            totalOrderPrice += product.totalPrice
                             document.getElementById("DisplayItems").innerHTML+=
                                `
                                <div class="card">
@@ -26,7 +34,8 @@
                                     <div class="card-body">
                                         <h5 class="card-title">${product.productName}</h5>
                                         <p class="card-text">${product.description}</p>
-                                        <p class="card-text">Price:<small class="text-muted">${product.totalPrice}</small></p>
+                                        <p>Piece price: <b>${product.price}</b></p>
+                                        <p class="card-text">Total price:<small class="text-muted">${product.totalPrice}</small></p>
                                         <p>Quantity: <b>${product.quantity}</b></p>
                                             <button onclick="IncreaseItem(${product.productId})" class="btn btn-success btn-warning">
                                             <i class="fa-solid fa-google-plus-square">+</i>
@@ -40,6 +49,8 @@
                                     </div>
                                 </div>
                                `
+                            }
+                            document.getElementById("totalprice").innerHTML+= `Total order price: <b>${totalOrderPrice}</b>`
                         }
                     }
                 }
@@ -54,8 +65,12 @@
                     data : {productId : productId},
                     success : function(response){  
                         console.log("Data Saved", response);
+                        var empty = ""
+                        document.getElementById("DisplayItems").innerHTML=empty
+                        var totalOrderPrice = 0;
                         for(res of response)
                         {
+                            totalOrderPrice += res.totalPrice
                             document.getElementById("DisplayItems").innerHTML+=
                                `
                                <div class="card">
@@ -63,7 +78,8 @@
                                     <div class="card-body">
                                         <h5 class="card-title">${res.productName}</h5>
                                         <p class="card-text">${res.description}</p>
-                                        <p class="card-text">Price:<small class="text-muted">${res.totalPrice}</small></p>
+                                        <p>Piece price: <b>${res.price}</b></p>
+                                        <p class="card-text">Total price:<small class="text-muted">${res.totalPrice}</small></p>
                                         <p>Quantity: <b>${res.quantity}</b></p>
                                             <button onclick="IncreaseItem(${res.productId})" class="btn btn-success btn-warning">
                                             <i class="fa-solid fa-google-plus-square">+</i>
@@ -78,6 +94,8 @@
                                 </div>
                                `
                         }
+                      document.getElementById("totalprice").innerHTML = ""
+                      document.getElementById("totalprice").innerHTML+= `Total order price: <b>${totalOrderPrice}</b>`
                     }
                 }
             );
@@ -92,6 +110,37 @@
                     success : function(response){
                         let res = response;
                         console.log("Data Saved", response);
+                         var empty = ""
+                        document.getElementById("DisplayItems").innerHTML=empty
+                        var totalOrderPrice = 0;
+                        for(res of response)
+                        {
+                            totalOrderPrice += res.totalPrice
+                            document.getElementById("DisplayItems").innerHTML+=
+                               `
+                               <div class="card">
+                                    <img src="/${res.imgUrl}" class="card-img-top" alt="..." style="width:150px;height:150px">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${res.productName}</h5>
+                                        <p class="card-text">${res.description}</p>
+                                         <p>Piece price: <b>${res.price}</b></p>
+                                        <p class="card-text">Total price:<small class="text-muted">${res.totalPrice}</small></p>
+                                        <p>Quantity: <b>${res.quantity}</b></p>
+                                            <button onclick="IncreaseItem(${res.productId})" class="btn btn-success btn-warning">
+                                            <i class="fa-solid fa-google-plus-square">+</i>
+                                        </button>
+                                        <button onclick="DecreaseItem(${res.productId})" class="btn btn-success btn-warning">
+                                                <i class="fa-solid fa-google-plus-square">-</i>
+                                        </button>
+                                        <button onclick="RemoveItem(${res.productId})" class="btn btn-danger btn-sm">
+                                            <i class="fa-solid fa-trash">Delete</i>
+                                        </button>
+                                    </div>
+                                </div>
+                               `
+                        }
+                        document.getElementById("totalprice").innerHTML =""
+                        document.getElementById("totalprice").innerHTML+= `Total order price: <b>${totalOrderPrice}</b>`
                     }
                 }
             );
@@ -106,6 +155,37 @@
                     success : function(response){
                         let res = response;
                         console.log("Data Saved", response);
+                         var empty = ""
+                        document.getElementById("DisplayItems").innerHTML=empty
+                        var totalOrderPrice = 0;
+                        for(res of response)
+                        {
+                            totalOrderPrice += res.totalPrice
+                            document.getElementById("DisplayItems").innerHTML+=
+                               `
+                               <div class="card">
+                                    <img src="/${res.imgUrl}" class="card-img-top" alt="..." style="width:150px;height:150px">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${res.productName}</h5>
+                                        <p class="card-text">${res.description}</p>
+                                        <p>Piece price: <b>${res.price}</b></p>
+                                        <p class="card-text">Total price:<small class="text-muted">${res.totalPrice}</small></p>
+                                        <p>Quantity: <b>${res.quantity}</b></p>
+                                            <button onclick="IncreaseItem(${res.productId})" class="btn btn-success btn-warning">
+                                            <i class="fa-solid fa-google-plus-square">+</i>
+                                        </button>
+                                        <button onclick="DecreaseItem(${res.productId})" class="btn btn-success btn-warning">
+                                                <i class="fa-solid fa-google-plus-square">-</i>
+                                        </button>
+                                        <button onclick="RemoveItem(${res.productId})" class="btn btn-danger btn-sm">
+                                            <i class="fa-solid fa-trash">Delete</i>
+                                        </button>
+                                    </div>
+                                </div>
+                               `
+                        }
+                        document.getElementById("totalprice").innerHTML =""
+                        document.getElementById("totalprice").innerHTML+= `Total order price: <b>${totalOrderPrice}</b>`
                     }
                 }
             );

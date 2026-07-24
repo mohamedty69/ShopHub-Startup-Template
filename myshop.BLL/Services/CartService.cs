@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Identity.Client;
 using myshop.BLL.DTOs.Cart;
 using myshop.BLL.IServices;
 using myshop.DAL.Data;
@@ -47,7 +48,8 @@ namespace myshop.BLL.Services
                     var exstPtoduct = deserializedListOfProducts.FirstOrDefault(p => p.ProductId == mappedProduct.ProductId);
                     if (exstPtoduct != null)
                     {
-                       return IncreaseQuantityOfItemAsync(exstPtoduct.ProductId);
+                        IncreaseQuantityOfItem(exstPtoduct.ProductId);
+                        return true;
                     }
                     else
                     {
@@ -67,11 +69,11 @@ namespace myshop.BLL.Services
             }
             }
 
-        public async Task<bool> DecreaseQuantityOfItemAsync(int id)
+        public  IEnumerable<CartItem> DecreaseQuantityOfItem(int id)
         {
             var cartItems = _httpContextAccessor.HttpContext.Session.GetString("Customer Product");
             if (string.IsNullOrEmpty(cartItems))
-                return false;
+                throw new NullReferenceException("The Cart is empty add items now");
             var deserializeCartItems = JsonSerializer.Deserialize<List<CartItem>>(cartItems);
             var item = deserializeCartItems.FirstOrDefault(c => c.ProductId == id);
             if (item != null)
@@ -79,18 +81,18 @@ namespace myshop.BLL.Services
                 item.Quantity--;
                 if(item.Quantity == 0)
                 {
-                    var result = await RemoveItemFromCartAsync(id);
-                    if(result) return true;
-                    return false;
+                    var cartList =  RemoveItemFromCart(id);
+                    if(cartList != null) return cartList;
+                    throw new NullReferenceException("The cart now is empty add items to it");
                 }    
                 item.TotalPrice = item.Price * item.Quantity;
                 var index = deserializeCartItems.IndexOf(item);
                 deserializeCartItems[index] = item;
                 var serializeCartItem = JsonSerializer.Serialize(deserializeCartItems);
                 _httpContextAccessor.HttpContext.Session.SetString("Customer Product", serializeCartItem);
-                return true;
+                return deserializeCartItems;
             }
-            return false;
+            throw new NullReferenceException("The item is not found");
         }
 
         public bool DeleteCart()
@@ -117,13 +119,13 @@ namespace myshop.BLL.Services
             }
         }
 
-        public bool IncreaseQuantityOfItemAsync(int id)
+        public IEnumerable<CartItem> IncreaseQuantityOfItem(int id)
         {
             try
             {
                 var cartItems = _httpContextAccessor.HttpContext.Session.GetString("Customer Product");
                 if (string.IsNullOrEmpty(cartItems))
-                    return false;
+                    throw new NullReferenceException("The cart is empty");
                 var deserializeCartItems = JsonSerializer.Deserialize<List<CartItem>>(cartItems);
                 var item = deserializeCartItems.FirstOrDefault(c => c.ProductId == id);
                 if (item != null)
@@ -134,9 +136,9 @@ namespace myshop.BLL.Services
                     deserializeCartItems[index] = item;
                     var serializeCartItem = JsonSerializer.Serialize(deserializeCartItems);
                     _httpContextAccessor.HttpContext.Session.SetString("Customer Product", serializeCartItem);
-                    return true;
+                    return deserializeCartItems;
                 }
-                return false;
+                throw new NullReferenceException("The item is not found");
             }
             catch (Exception ex)
             {
@@ -144,13 +146,13 @@ namespace myshop.BLL.Services
             }
         }
 
-        public async Task<bool> RemoveItemFromCartAsync(int id)
+        public IEnumerable<CartItem> RemoveItemFromCart(int id)
         {
             try
             { 
             var cartItems = _httpContextAccessor.HttpContext.Session.GetString("Customer Product");
-                if(string.IsNullOrEmpty(cartItems))
-                    return false;
+                if (string.IsNullOrEmpty(cartItems))
+                    throw new NullReferenceException("The Cart is empty add items now");
             var deserializeCartItems = JsonSerializer.Deserialize<List<CartItem>>(cartItems);
             var check = deserializeCartItems.FirstOrDefault(c => c.ProductId == id);
             if (check != null)
@@ -158,9 +160,9 @@ namespace myshop.BLL.Services
                 deserializeCartItems.Remove(check);
                 var serializeCartItem = JsonSerializer.Serialize(deserializeCartItems);
                 _httpContextAccessor.HttpContext.Session.SetString("Customer Product", serializeCartItem);
-                return true;
+                return deserializeCartItems;
             }
-            return false;
+               throw new NullReferenceException("The item is not found");
             }
             catch (Exception ex)
             {

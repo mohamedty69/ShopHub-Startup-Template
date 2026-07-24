@@ -11,7 +11,6 @@ namespace myshop.BLL.DTOs.Cart
         public string ImgUrl { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public decimal TotalPrice { get; set; }
-        public decimal TotalItemsPrice { get; set; }
         public string Description { get; set; } = string.Empty;
         public int Quantity { get; set; }
     }

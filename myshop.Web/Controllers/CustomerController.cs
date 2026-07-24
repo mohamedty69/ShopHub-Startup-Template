@@ -47,25 +47,25 @@ namespace myshop.PL.Controllers
                 
             return Json(items);
         }
-        public async Task<IActionResult> RemoveItem(int productId)
+        public IActionResult RemoveItem(int productId)
         {
-            var result = await _cartService.RemoveItemFromCartAsync(productId);
-            if (result)
-                return Ok();
+            var cartListAfterRemoveItemresult =  _cartService.RemoveItemFromCart(productId);
+            if (cartListAfterRemoveItemresult != null)
+                return Json(cartListAfterRemoveItemresult);
             return Json("The item can not be found");
         }
         public IActionResult IncreaseItem(int productId)
         {
-            var result = _cartService.IncreaseQuantityOfItemAsync(productId);
-            if (result)
-                return Ok();
+            var cartListAfterIncreaseItem = _cartService.IncreaseQuantityOfItem(productId);
+            if (cartListAfterIncreaseItem != null)
+                return Json(cartListAfterIncreaseItem);
             return Json("Failed to increase item");
         }
-        public async Task<IActionResult> DecreaseItem(int productId)
+        public IActionResult DecreaseItem(int productId)
         {
-            var result = await _cartService.DecreaseQuantityOfItemAsync(productId);
-            if (result)
-                return Ok();
+            var cartListAfterDecreaseItem =  _cartService.DecreaseQuantityOfItem(productId);
+            if (cartListAfterDecreaseItem != null)
+                return Json(cartListAfterDecreaseItem);
             return Json("Failed to decrease item");
         }
         public IActionResult DeleteCustomerCart()
