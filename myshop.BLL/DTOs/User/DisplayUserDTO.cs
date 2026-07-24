@@ -16,5 +16,6 @@ namespace myshop.BLL.DTOs.User
         public string City { get; set; }
         public string Role { get; set; }
         public bool IsLocked { get; set; } = false;
+        public string RoleName { get; set; }
     }
 }

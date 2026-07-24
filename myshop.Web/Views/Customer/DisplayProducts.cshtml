@@ -4,16 +4,6 @@
 }
 <h1>Customer View</h1>
  <div id="ItemCard" class="card-deck">
-    @* <div class="card">
-        <img src="/@product.Image" class="card-img-top" alt="..." style="width:150px;height:150px">
-        <div class="card-body">
-            <h5 class="card-title">@product.ProductName</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            <p class="card-text"><small class="text-muted">@product.Price</small></p>
-            <a href="AddItemToCart/@product.ProductId" class="btn btn-primary"><bold>Add To Cart</bold></a>
-                <a href="DisplayItem" class="btn btn-primary"><bold>Show Item</bold></a>
-        </div>
-    </div> *@
 </div> 
 @section Scripts {
     <script>
@@ -35,8 +25,8 @@
                         <h5 class="card-title">${product.productName}</h5>
                         <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                         <p class="card-text"><small class="text-muted">${product.price}</small></p>
-                        <a href="AddItemToCart/${product.productId}" class="btn btn-primary"><bold>Add To Cart</bold></a>
-                            <a href="DisplayItem" class="btn btn-primary"><bold>Show Item</bold></a>
+                        <button onclick = "AddItem(${product.productId})" class="btn btn-primary"><bold>Add To Cart</bold></button>
+                            <a href="/Customer/DisplayItemView" class="btn btn-primary"><bold>Show Item</bold></a>
                                 </div>
                             </div>
                         </div>
@@ -47,6 +37,23 @@
                 }
             );
         }
+        function AddItem(productId)
+            {
+                $.ajax(
+                    {
+                        url : "/Customer/AddItemToCart",
+                        method : "POST",
+                        data : {productId : productId},
+                        success : function(response){
+                            let res = response;
+                            console.log("Data Saved", response);
+                        },
+                        error : function(error){
+                            console.log("Error Occured", error);
+                        }
+                    }
+                );
+            }
         $(document).ready(function() {
             GetProducts();
         });

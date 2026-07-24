@@ -47,7 +47,7 @@ namespace myshop.BLL.Services
                     var exstPtoduct = deserializedListOfProducts.FirstOrDefault(p => p.ProductId == mappedProduct.ProductId);
                     if (exstPtoduct != null)
                     {
-                        IncreaseQuantityOfItemAsync(exstPtoduct.ProductId);
+                       return IncreaseQuantityOfItemAsync(exstPtoduct.ProductId);
                     }
                     else
                     {
