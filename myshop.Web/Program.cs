@@ -51,6 +51,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
     options.AccessDeniedPath = "/Home/AccessDenied";
 });
+builder.Services.AddMemoryCache();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(opt =>
   { 

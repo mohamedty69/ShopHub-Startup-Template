@@ -1,38 +1,132 @@
-﻿@model IEnumerable<DisplayAllProducts>
-@{
+﻿@{
     Layout = "_Customer";
 }
-<h1>Customer View</h1>
+<style>
+    #searchForm {
+        display:flex
+}
+</style>
+<h1 style="align-content:center;align-items:center">Customer View</h1>
+<form id="searchForm" class="form-inline my-2 my-lg-0" >
+    <input id="searchInput" style="width:200px;height:40px" name="searchWord" class="form-control mr-sm-2" placeholder="Search" aria-label="Search">
+    <button onclick="GetProducts()" class="btn btn-outline-success my-2 my-sm-0" type="button">Search</button>
+</form>
+<div id="example">
+        <label>
+            Order by:
+            <select id="columnName" aria-controls="example" onchange="GetProducts()">
+                <option value="Name">Name</option>
+                <option value="Price">Price</option>
+            </select>
+        </label>
+</div>
+<div class="dataTables_length" id="example_length">
+    <label>
+        Show
+        <select id="pageSize" aria-controls="example" onchange="GetPageSize()">
+            <option value="5" selected>5</option>
+            <option value="10" >10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+        entries
+    </label>
+</div>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+            <button name="third" id="prevPage" type="button" onclick="DecreasePageNumber()">Previous</button>
+        </li>
+        <li class="page-item"><button name="first" id="firstPage" type="button" onclick="GetPageNumber(1)">1</button></li>
+        <li class="page-item"><button name="second" id="secondPage" type="button" onclick="GetPageNumber(2)">2</button></li>
+        <li class="page-item"><button name="third" id="thirdPage" type="button" onclick="GetPageNumber(3)">3</button></li>
+        <li class="page-item">
+            <button name="next" id="nextPage" type="button" onclick="IncreasePageNumber()">Next</button>
+        </li>
+    </ul>
+</nav>
  <div id="ItemCard" class="card-deck">
 </div> 
 @section Scripts {
     <script>
+        let currentPage = 1;
+        let currentPageSize = 5;
+        let sortColumn = "Name";
+        let searchword = "";
+        let sortOrder = "asc";
+        function GetPageNumber(pageNumber)
+        {
+            currentPage = pageNumber;
+            GetProducts()
+        }
+        function IncreasePageNumber()
+        {
+            currentPage = currentPage + 1;
+            GetProducts()
+        }
+        function DecreasePageNumber()
+        {
+            if(currentPage == 1)
+            {
+               currentPage = 1;
+               GetProducts()
+            }
+            else
+            {
+                currentPage = currentPage - 1;
+                GetProducts()
+            }
+        }
+        function GetPageSize()
+        {
+            currentPageSize = $("#pageSize").val();
+            currentPage = 1;
+            GetProducts()
+        }
         function GetProducts(){
+            searchword = $("#searchInput").val();
+            sortColumn = $("#columnName").val();
+            console.log(searchword)
             $.ajax(
                 {
                     url : "/Customer/DisplayProduct",
                     method : "GET",
+                    data : {searchWord : searchword,
+                            currentPageSize : currentPageSize,
+                            currentPage : currentPage,
+                            sortColumn : sortColumn,
+                            sortOrder : sortOrder
+                    },
                     success: function(result){
                         let res = result;
                         console.log(result);
-                        for(product of result)
+                        document.getElementById("ItemCard").innerHTML =""
+                        for(product of result.list)
                         {
                             document.getElementById("ItemCard").innerHTML += `
-                                    <div id="ItemCard" class="card-deck">
-                                    <div class="card">
-                        <img src="/${product.image}" class="card-img-top" alt="..." style="width:150px;height:150px">
-                        <div class="card-body">
-                        <h5 class="card-title">${product.productName}</h5>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <p class="card-text"><small class="text-muted">${product.price}</small></p>
-                        <button onclick = "AddItem(${product.productId})" class="btn btn-primary"><bold>Add To Cart</bold></button>
-                            <a href="/Customer/DisplayItemView" class="btn btn-primary"><bold>Show Item</bold></a>
+                            <div id="ItemCard" class="card-deck">
+                                <div class="card">
+                                    <img src="/${product.image}" class="card-img-top" alt="..." style="width:150px;height:150px">
+                                    <div class="card-body">
+                                    <h5 class="card-title">${product.productName}</h5>
+                                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                    <p class="card-text"><small class="text-muted">${product.price}</small></p>
+                                    <button onclick = "AddItem(${product.productId})" class="btn btn-primary"><bold>Add To Cart</bold></button>
+                                    <a href="/Customer/DisplayItemView" class="btn btn-primary"><bold>Show Item</bold></a>
                                 </div>
                             </div>
                         </div>
                             `
                         }
-                        
+                        if(!result.hasNextPage)
+                            $("#nextPage").attr("disabled",true)
+                        else 
+                            $("#nextPage").removeAttr("disabled")
+                        if (!result.hasPreviousPage)
+                            $("#prevPage").attr("disabled",true)
+                        else 
+                            $("#prevPage").removeAttr("disabled")
                     }
                 }
             );

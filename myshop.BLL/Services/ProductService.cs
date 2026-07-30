@@ -5,10 +5,13 @@ using myshop.BLL.DTOs.Cart;
 using myshop.BLL.DTOs.Product.Admin;
 using myshop.BLL.DTOs.Product.Customer;
 using myshop.BLL.IServices;
+using myshop.BLL.PageList;
 using myshop.DAL.Iconfiguration;
 using myshop.Entities.Models;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Globalization;
+using System.Linq.Expressions;
 using System.Text.Json;
 
 namespace myshop.BLL.Services
@@ -70,13 +73,15 @@ namespace myshop.BLL.Services
             return false;
         }
 
-        public async Task<IEnumerable<DisplayAllProducts>> GetAllProductsForCustomersAsync()
+        public async Task<PageList<DisplayAllProducts>> GetAllProductsForCustomersAsync(string searchWord, string sortColumn, String sortOrder, int page, int pagesize)
         {
             try
             {
-                var listOfProductForCustomers = await _unitOfWork.Products.GetAll();
+                var listOfProductForCustomers = await _unitOfWork.Products.GetProductWithPagination( searchWord,  sortColumn,  sortOrder,  page,  pagesize);
                 var mappedList = _mapper.Map<IEnumerable<DisplayAllProducts>>(listOfProductForCustomers);
-                return mappedList;
+                var pageInfo = new PageList<DisplayAllProducts>(mappedList.ToList(), page, pagesize, mappedList.Count());
+
+                return pageInfo;
             }
             catch (Exception ex)
             {

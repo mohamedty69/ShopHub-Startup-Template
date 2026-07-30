@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Microsoft.Extensions.Caching.Memory;
 using myshop.BLL.DTOs.Category;
 using myshop.BLL.IServices;
 using myshop.DAL.Iconfiguration;
@@ -13,10 +14,14 @@ namespace myshop.BLL.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IMemoryCache _memoryCache;
+        private const string CategoryListCacheKey = "CategoryListCacheKey";
+
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _memoryCache = memoryCache;
         }
         public async Task<bool> CreaetCategoryAsync(CategoryDTO category)
         {
@@ -25,6 +30,7 @@ namespace myshop.BLL.Services
             if (check)
             {
                 await _unitOfWork.CompleteTask();
+                _memoryCache.Remove(CategoryListCacheKey);
                 return true;
             }
             else throw new InvalidOperationException("The category can not created");
@@ -34,13 +40,22 @@ namespace myshop.BLL.Services
         {
             await _unitOfWork.Categories.Delete(id);
             await _unitOfWork.CompleteTask();
+            _memoryCache.Remove(CategoryListCacheKey);
         }
 
         public async Task<IEnumerable<CategoryDTO>> GetCategoriesAsync() 
         {
-            var listOfCategory = await _unitOfWork.Categories.GetAll();
-            var mappedList = _mapper.Map<IEnumerable<CategoryDTO>>(listOfCategory);
-            return mappedList;
+            if (!_memoryCache.TryGetValue(CategoryListCacheKey, out IEnumerable<CategoryDTO>? mappedList))
+            {
+                var listOfCategory = await _unitOfWork.Categories.GetAll();
+                mappedList = _mapper.Map<IEnumerable<CategoryDTO>>(listOfCategory);
+
+                var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
+
+                _memoryCache.Set(CategoryListCacheKey, mappedList, cacheOptions);
+            }
+            return mappedList!;
         }
 
         public async Task<CategoryDTO> GetCategoryByIdAsync(int id)
@@ -57,6 +72,7 @@ namespace myshop.BLL.Services
             if (check)
             { 
                 await _unitOfWork.CompleteTask();
+                _memoryCache.Remove(CategoryListCacheKey);
                 return true;
             }
             return false;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using myshop.BLL.DTOs.Product.Customer;
 using myshop.BLL.IServices;
 using System.Text.Json;
@@ -24,9 +25,9 @@ namespace myshop.PL.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> DisplayProduct()
+        public async Task<IActionResult> DisplayProduct(string searchWord, string sortColumn, String sortOrder, int currentPage, int currentPageSize)
         {
-            var listOfProducts = await _productService.GetAllProductsForCustomersAsync();
+            var listOfProducts = await _productService.GetAllProductsForCustomersAsync( searchWord,  sortColumn,  sortOrder, currentPage, currentPageSize);
             return Json(listOfProducts);
         }
         public async Task<IActionResult> AddItemToCart(int productId)

@@ -4,6 +4,8 @@ using myshop.DataAccess;
 using myshop.Entities.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace myshop.DAL.Repository
@@ -32,7 +34,7 @@ namespace myshop.DAL.Repository
             var product = await _context.Products
                 .Include(c => c.Category)
                 .FirstOrDefaultAsync(p => p.Id == id);
-            return product?? throw new NullReferenceException("The product not found");
+            return product ?? throw new NullReferenceException("The product not found");
         }
 
         public override async Task<bool> Update(Product entity)
@@ -54,5 +56,36 @@ namespace myshop.DAL.Repository
         {
             return base.Delete(id);
         }
+
+        public async Task<List<Product>> GetProductWithPagination(string searchWord, string sortColumn, string sortOrder ,int page, int pageSize)
+        {
+            var product = _context.Products.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(searchWord))
+            {
+                 product = product.Where(p => p.Name.Contains(searchWord));
+            }
+            if (!string.IsNullOrWhiteSpace(sortColumn))
+            {
+                if (sortOrder == "desc")
+                    product = product.OrderByDescending(GetSortName(sortColumn));
+                product = product.OrderBy(GetSortName(sortColumn));
+            }
+            var productAfterQueries = await product.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            return productAfterQueries;
+
+        }
+
+        public Expression<Func<Product, object>> GetSortName(string sortColumn) 
+        {
+            switch (sortColumn.ToLower())
+            {
+                case "name":
+                        return Product => Product.Name;
+                case "price":
+                     return Product => Product.Price;
+            }
+            return null;
+        }
+        
     }
 }
