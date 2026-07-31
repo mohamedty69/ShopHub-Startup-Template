@@ -1,6 +1,16 @@
 <Project>
   <PropertyGroup>
-    <!-- Ensure 'Files' property remains empty during target execution -->
     <Files></Files>
   </PropertyGroup>
+  <ItemGroup>
+    <Files Remove="@(Files)" />
+  </ItemGroup>
+  <Target Name="ResetFilesPropertyAndItems" BeforeTargets="BeforeBuild;Build;PrepareForBuild;Restore;GetCopyToOutputDirectoryItems;DefineStaticWebAssets;GenerateStaticWebAssetsManifest;AssignTargetPaths">
+    <PropertyGroup>
+      <Files></Files>
+    </PropertyGroup>
+    <ItemGroup>
+      <Files Remove="@(Files)" />
+    </ItemGroup>
+  </Target>
 </Project>
