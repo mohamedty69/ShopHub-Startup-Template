@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <!-- Override and clear 'Files' property to prevent invalid path errors caused by environment variables or evaluation payloads -->
+    <Files></Files>
+  </PropertyGroup>
+  <ItemGroup>
+    <Files Remove="@(Files)" />
+  </ItemGroup>
+</Project>

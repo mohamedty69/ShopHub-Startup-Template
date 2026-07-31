@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Ensure 'Files' property remains empty during target execution -->
+    <Files></Files>
+  </PropertyGroup>
+</Project>
