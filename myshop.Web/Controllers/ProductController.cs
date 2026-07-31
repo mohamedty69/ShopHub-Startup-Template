@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using myshop.BLL.DTOs.Product.Admin;
 using myshop.BLL.IServices;
@@ -90,10 +90,18 @@ namespace myshop.Web.Controllers
 
                 if (file != null)
                 {
-                    if (editProductDTO.Img != null)
+                    if (!string.IsNullOrWhiteSpace(editProductDTO.Img))
                     {
-                        var oldimg = Path.Combine(RootPath, editProductDTO.Img.TrimStart('\\'));
-                        _fileService.DeleteFile(oldimg);
+                        try
+                        {
+                            var cleanImg = editProductDTO.Img.TrimStart('\\', '/');
+                            if (cleanImg.IndexOfAny(Path.GetInvalidPathChars()) < 0)
+                            {
+                                var oldimg = Path.Combine(RootPath, cleanImg);
+                                _fileService.DeleteFile(oldimg);
+                            }
+                        }
+                        catch { }
                     }
                     var imagePath = await _fileService.SaveFileAsync(file, RootPath);
                     editProductDTO.Img = imagePath;
@@ -114,8 +122,19 @@ namespace myshop.Web.Controllers
                 var check = await _productService.DeleteProductAsync(id);
                 if (check)
                 { 
-                    var oldimg = Path.Combine(_webHostEnvironment.WebRootPath, product.Img);
-                    _fileService.DeleteFile(oldimg);
+                    if (!string.IsNullOrWhiteSpace(product.Img))
+                    {
+                        try
+                        {
+                            var cleanImg = product.Img.TrimStart('\\', '/');
+                            if (cleanImg.IndexOfAny(Path.GetInvalidPathChars()) < 0)
+                            {
+                                var oldimg = Path.Combine(_webHostEnvironment.WebRootPath, cleanImg);
+                                _fileService.DeleteFile(oldimg);
+                            }
+                        }
+                        catch { }
+                    }
                     return Json(new { success = true, message = "file has been Deleted" });
                 }
             }
