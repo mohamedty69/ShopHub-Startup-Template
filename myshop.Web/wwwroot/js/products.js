@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
 
     $("#mytable").DataTable({
         ajax: {
@@ -15,12 +15,12 @@
                 data: "id",
                 render: function (id) {
                     return `
-                        <a href="/Product/Edit/${id}" class="btn btn-success btn-sm">
-                            <i class="fa-solid fa-pen"></i>
+                        <a href="/Product/Edit/${id}" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="fa-solid fa-pen"></i> Edit
                         </a>
 
-                        <a href="/Product/Delete/${id}" class="btn btn-danger btn-sm">
-                            <i class="fa-solid fa-trash"></i>
+                        <a href="/Product/Delete/${id}" class="btn btn-outline-danger btn-sm">
+                            <i class="fa-solid fa-trash"></i> Delete
                         </a>
                         
                     `;

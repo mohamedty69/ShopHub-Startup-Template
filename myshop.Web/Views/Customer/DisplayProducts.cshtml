@@ -1,53 +1,65 @@
-﻿@{
+@{
     Layout = "_Customer";
 }
-<style>
-    #searchForm {
-        display:flex
-}
-</style>
-<h1 style="align-content:center;align-items:center">Customer View</h1>
-<form id="searchForm" class="form-inline my-2 my-lg-0" >
-    <input id="searchInput" style="width:200px;height:40px" name="searchWord" class="form-control mr-sm-2" placeholder="Search" aria-label="Search">
-    <button onclick="GetProducts()" class="btn btn-outline-success my-2 my-sm-0" type="button">Search</button>
-</form>
-<div id="example">
-        <label>
-            Order by:
-            <select id="columnName" aria-controls="example" onchange="GetProducts()">
-                <option value="Name">Name</option>
-                <option value="Price">Price</option>
-            </select>
-        </label>
+<div class="container py-4">
+    <div class="custom-card mb-4">
+        <h2 class="text-center mb-4" style="color: #1e3a8a; font-weight: 700;">Discover Our Products</h2>
+        
+        <div class="search-wrapper flex-wrap align-items-center justify-content-between">
+            <div class="d-flex w-100 justify-content-between mb-3">
+                <form id="searchForm" class="d-flex flex-grow-1 me-3" onsubmit="event.preventDefault(); GetProducts();">
+                    <input id="searchInput" name="searchWord" class="form-control me-2" placeholder="Search for products..." aria-label="Search" style="max-width: 400px;">
+                    <button onclick="GetProducts()" class="btn btn-primary shadow-sm" type="button">
+                        <i class="bi bi-search"></i> Search
+                    </button>
+                </form>
+                <a href="/Customer/DisplayItemView" class="btn btn-success shadow-sm d-flex align-items-center" style="white-space: nowrap;">
+                    <i class="bi bi-cart3 me-2"></i> View Cart
+                </a>
+            </div>
+
+            <div class="d-flex align-items-center gap-3 mt-3 mt-md-0">
+                <div class="d-flex align-items-center">
+                    <label class="me-2 fw-bold text-secondary mb-0">Sort By:</label>
+                    <select id="columnName" class="form-select" style="width: auto;" aria-controls="example" onchange="GetProducts()">
+                        <option value="Name">Name</option>
+                        <option value="Price">Price</option>
+                    </select>
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <label class="me-2 fw-bold text-secondary mb-0">Show:</label>
+                    <select id="pageSize" class="form-select" style="width: auto;" aria-controls="example" onchange="GetPageSize()">
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mb-4">
+            <li class="page-item">
+                <button name="prev" id="prevPage" class="page-link shadow-sm" type="button" onclick="DecreasePageNumber()">Previous</button>
+            </li>
+            <li class="page-item"><button name="first" id="firstPage" class="page-link shadow-sm" type="button" onclick="GetPageNumber(1)">1</button></li>
+            <li class="page-item"><button name="second" id="secondPage" class="page-link shadow-sm" type="button" onclick="GetPageNumber(2)">2</button></li>
+            <li class="page-item"><button name="third" id="thirdPage" class="page-link shadow-sm" type="button" onclick="GetPageNumber(3)">3</button></li>
+            <li class="page-item">
+                <button name="next" id="nextPage" class="page-link shadow-sm" type="button" onclick="IncreasePageNumber()">Next</button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Product Grid -->
+    <div id="ItemCard" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 pb-5">
+    </div>
 </div>
-<div class="dataTables_length" id="example_length">
-    <label>
-        Show
-        <select id="pageSize" aria-controls="example" onchange="GetPageSize()">
-            <option value="5" selected>5</option>
-            <option value="10" >10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-        </select>
-        entries
-    </label>
-</div>
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-            <button name="third" id="prevPage" type="button" onclick="DecreasePageNumber()">Previous</button>
-        </li>
-        <li class="page-item"><button name="first" id="firstPage" type="button" onclick="GetPageNumber(1)">1</button></li>
-        <li class="page-item"><button name="second" id="secondPage" type="button" onclick="GetPageNumber(2)">2</button></li>
-        <li class="page-item"><button name="third" id="thirdPage" type="button" onclick="GetPageNumber(3)">3</button></li>
-        <li class="page-item">
-            <button name="next" id="nextPage" type="button" onclick="IncreasePageNumber()">Next</button>
-        </li>
-    </ul>
-</nav>
- <div id="ItemCard" class="card-deck">
-</div> 
 @section Scripts {
     <script>
         let currentPage = 1;
@@ -105,18 +117,21 @@
                         for(product of result.list)
                         {
                             document.getElementById("ItemCard").innerHTML += `
-                            <div id="ItemCard" class="card-deck">
-                                <div class="card">
-                                    <img src="/${product.image}" class="card-img-top" alt="..." style="width:150px;height:150px">
+                            <div class="col">
+                                <div class="product-card h-100">
+                                    <img src="/${product.image}" class="card-img-top" alt="${product.productName}">
                                     <div class="card-body">
-                                    <h5 class="card-title">${product.productName}</h5>
-                                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text"><small class="text-muted">${product.price}</small></p>
-                                    <button onclick = "AddItem(${product.productId})" class="btn btn-primary"><bold>Add To Cart</bold></button>
-                                    <a href="/Customer/DisplayItemView" class="btn btn-primary"><bold>Show Item</bold></a>
+                                        <h5 class="card-title text-truncate" title="${product.productName}">${product.productName}</h5>
+                                        <p class="card-text text-muted small" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">This is a premium product available in our store. Check it out and add it to your cart.</p>
+                                        <div class="price-tag">$${product.price}</div>
+                                        <div class="card-actions mt-auto d-flex">
+                                            <button onclick="AddItem(${product.productId})" class="btn btn-success flex-grow-1 shadow-sm">
+                                                <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                             `
                         }
                         if(!result.hasNextPage)
@@ -141,6 +156,16 @@
                         success : function(response){
                             let res = response;
                             console.log("Data Saved", response);
+                            // Dynamically increase the cart badge count
+                            let cartBadge = document.getElementById('cart-count');
+                            if (cartBadge) {
+                                let currentCount = parseInt(cartBadge.innerText) || 0;
+                                cartBadge.innerText = currentCount + 1;
+                                
+                                // Optional: add a small animation class for feedback
+                                cartBadge.classList.add('animate-bounce');
+                                setTimeout(() => cartBadge.classList.remove('animate-bounce'), 300);
+                            }
                         },
                         error : function(error){
                             console.log("Error Occured", error);

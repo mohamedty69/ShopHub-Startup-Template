@@ -1,69 +1,63 @@
-﻿@{
+@{
     ViewData["Title"] = "Display Users"; 
+    ViewBag.PageTitle = "User Management";
+    ViewBag.CardTitle = "Display All Users";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 @model IEnumerable<DisplayUserDTO>
-<style>
-    table {
-        border-collapse: collapse;
-        width: 100%;
-        border-block-end: 1px solid rgb(0,0,0);        
-    }
-</style >
-<h1>Display All Users</h1>
 
-<table class="table table-dark table-hover">
-    <thead>
-        <tr>   
-        <td>Name</td>
-        <td>User Name</td>
-        <td>Email</td>
-        <td>Phone Number</td>
-        <td>City</td>
-        <td>Address</td>
-        <td>Lock Account</td>
-        <td>Edit</td>
-        <td>Delete</td>
-        </tr>
-    </thead>
-        @foreach (DisplayUserDTO user in Model)
-        {
-        <tr>
-            <td>
-                @user.Name
-            </td>
-            <td>
-                @user.UserName
-            </td>
-            <td>
-                @user.Email
-            </td>
-            <td>
-                @user.PhoneNumber
-            </td>
-            <td>
-                @user.City
-            </td>
-            <td>
-                @user.Address
-            </td>
-            @if(!user.IsLocked)
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<div class="custom-card">
+    <div class="custom-card-header">
+        <h4><i class="fa-solid fa-users me-2 text-white"></i> @ViewBag.CardTitle</h4>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table-custom display text-nowrap">
+            <thead>
+                <tr>   
+                    <th>Name</th>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>City</th>
+                    <th>Address</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (DisplayUserDTO user in Model)
             {
-                <td>
-                    Not Locked
-                </td>
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>@user.PhoneNumber</td>
+                    <td>@user.City</td>
+                    <td>@user.Address</td>
+                    <td>
+                        @if(!user.IsLocked)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Locked</span>
+                        }
+                    </td>
+                    <td>
+                        <a href="/Home/EditUser/@user.UserID" class="btn btn-outline-primary btn-sm me-1" >
+                            <i class="fa-solid fa-pen"></i> Edit
+                        </a>
+                        <a href="/Home/DeleteUser/@user.UserID" class="btn btn-outline-danger btn-sm">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
             }
-            else
-            {
-                <td>
-                    Locked
-                </td>
-            }
-            <td>
-                <a href="/Home/EditUser/@user.UserID" class="btn btn-secondary" >Edit</a>
-            </td>
-            <td>
-                <a href="/Home/DeleteUser/@user.UserID" class="btn btn-secondary">Delete</a>
-            </td>
-        </tr>
-        }
-</table>
+            </tbody>
+        </table>
+    </div>
+</div>

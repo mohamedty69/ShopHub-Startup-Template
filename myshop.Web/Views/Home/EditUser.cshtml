@@ -1,52 +1,91 @@
-﻿@{
+@{
     ViewData["Title"] = "Edit Users";
+    ViewBag.PageTitle = "User Management";
+    ViewBag.CardTitle = "Edit User";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 @model EditUserDTO
-<h1>Edit User</h1>
-<form asp-action="EditUser" class="form form-control" method="post">
-    <input type="hidden" asp-for="UserID" />
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="custom-card">
+            <div class="custom-card-header">
+                <h4><i class="fa-solid fa-user-pen me-2 text-white"></i> @ViewBag.CardTitle</h4>
+            </div>
+            
+            <div class="card-body p-4">
+                <form asp-action="EditUser" method="post">
+                    <input type="hidden" asp-for="UserID" />
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="UserName" class="form-label"></label>
+                            <input asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="PhoneNumber" class="form-label"></label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="City" class="form-label"></label>
+                            <input asp-for="City" class="form-control" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Address" class="form-label"></label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Role" class="form-label"></label>
+                            <select asp-for="Role" class="form-control">
+                                <option value="Customer">Customer</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3 d-flex align-items-center mt-4">
+                            <div class="form-check">
+                                <input type="checkbox" asp-for="IsLocked" class="form-check-input" id="isLockedCheck" />
+                                <label class="form-check-label fw-bold text-danger" for="isLockedCheck">Lock Account</label>
+                            </div>
+                            <span asp-validation-for="IsLocked" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a href="/Home/DisplayUsers" class="btn btn-outline-secondary">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-floppy-disk me-1"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="UserName"></label>
-        <input asp-for="UserName" class="form-control" />
-        <span asp-validation-for="UserName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="City"></label>
-        <input asp-for="City" class="form-control" />
-        <span asp-validation-for="City" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Address"></label>
-        <input asp-for="Address" class="form-control" />
-        <span asp-validation-for="Address" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="PhoneNumber"></label>
-        <input asp-for="PhoneNumber" class="form-control" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-    <label asp-for="Role"></label>
-    <select asp-for="Role" class="form-select" aria-label="Disabled select example">
-        <option value="Customer">Customer</option>
-        <option value="Admin">Admin</option>
-    </select>
-    <span asp-validation-for="Role" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="IsLocked"></label>
-        <input type="checkbox" asp-for="IsLocked" class="form-check-input" />
-        <span asp-validation-for="Role" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-secondary">Edit</button>
-</form>
+</div>

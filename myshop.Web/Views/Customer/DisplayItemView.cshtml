@@ -1,10 +1,26 @@
-﻿@{
+@{
     Layout = "_Customer";
 }
-<a href="/Customer/DeleteCustomerCart" class="btn btn-danger alert-danger">Delete Cart</a>
-<button onclick="DisplayItems()" accesskey="" class="btn btn-success">Display Items</button>
-<h2 id ="totalprice"></h2> 
-<div id="DisplayItems" class="card-deck">
+<div class="container py-4">
+    <div class="custom-card mb-4 d-flex justify-content-between align-items-center flex-wrap">
+        <div>
+            <h2 class="mb-0" style="color: #1e3a8a; font-weight: 700;">
+                <i class="bi bi-cart3 me-2"></i> Your Shopping Cart
+            </h2>
+        </div>
+        <div class="d-flex align-items-center gap-3 mt-3 mt-md-0">
+            <h4 id="totalprice" class="mb-0 me-3 text-success fw-bold"></h4>
+            <button onclick="DisplayItems()" class="btn btn-primary shadow-sm">
+                <i class="bi bi-arrow-clockwise me-1"></i> Load Items
+            </button>
+            <a href="/Customer/DeleteCustomerCart" class="btn btn-danger shadow-sm" onclick="return confirm('Are you sure you want to clear your cart?');">
+                <i class="bi bi-trash me-1"></i> Clear Cart
+            </a>
+        </div>
+    </div>
+    
+    <div id="DisplayItems" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 pb-5">
+    </div>
 </div>
 @section Scripts {
     <script>
@@ -19,7 +35,7 @@
                         {
                             console.log(result)
                             document.getElementById("DisplayItems").innerHTML+=
-                            `<h1>Please add items to cart first</h1>`
+                            `<div class="col-12"><div class="alert alert-info shadow-sm w-100 text-center py-4" style="border-radius: 14px;"><i class="bi bi-info-circle fs-4 d-block mb-2"></i><h4 class="mb-0">Your cart is empty. Please add items to cart first.</h4></div></div>`
                         }
                         else
                         {
@@ -29,23 +45,37 @@
                             totalOrderPrice += product.totalPrice
                             document.getElementById("DisplayItems").innerHTML+=
                                `
-                               <div class="card">
-                                    <img src="/${product.imgUrl}" class="card-img-top" alt="..." style="width:150px;height:150px">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${product.productName}</h5>
-                                        <p class="card-text">${product.description}</p>
-                                        <p>Piece price: <b>${product.price}</b></p>
-                                        <p class="card-text">Total price:<small class="text-muted">${product.totalPrice}</small></p>
-                                        <p>Quantity: <b>${product.quantity}</b></p>
-                                            <button onclick="IncreaseItem(${product.productId})" class="btn btn-success btn-warning">
-                                            <i class="fa-solid fa-google-plus-square">+</i>
+                                <div class="col">
+                                    <div class="product-card h-100 position-relative">
+                                        <button onclick="RemoveItem(${product.productId})" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 rounded-circle shadow-sm d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; padding: 0; z-index: 2;" title="Remove Item">
+                                            <i class="bi bi-trash"></i>
                                         </button>
-                                        <button onclick="DecreaseItem(${product.productId})" class="btn btn-success btn-warning">
-                                                <i class="fa-solid fa-google-plus-square">-</i>
-                                        </button>
-                                        <button onclick="RemoveItem(${product.productId})" class="btn btn-danger btn-sm">
-                                            <i class="fa-solid fa-trash">Delete</i>
-                                        </button>
+                                        <img src="/${product.imgUrl}" class="card-img-top" alt="${product.productName}">
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title text-truncate" title="${product.productName}">${product.productName}</h5>
+                                            <p class="card-text text-muted small flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${product.description}</p>
+                                            
+                                            <div class="d-flex justify-content-between align-items-end mt-3 mb-3 pb-3 border-bottom border-light">
+                                                <div>
+                                                    <span class="text-muted small d-block">Price</span>
+                                                    <span class="fw-bold text-dark">$${product.price}</span>
+                                                </div>
+                                                <div class="text-end">
+                                                    <span class="text-muted small d-block">Total</span>
+                                                    <span class="price-tag mb-0" style="font-size: 1.2rem;">$${product.totalPrice}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between align-items-center mt-auto bg-light rounded-pill p-1">
+                                                <button onclick="DecreaseItem(${product.productId})" class="btn btn-outline-secondary rounded-circle btn-sm d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; padding: 0;">
+                                                    <i class="bi bi-dash"></i>
+                                                </button>
+                                                <span class="fw-bold mx-3">${product.quantity}</span>
+                                                <button onclick="IncreaseItem(${product.productId})" class="btn btn-primary rounded-circle btn-sm d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; padding: 0;">
+                                                    <i class="bi bi-plus-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                `
@@ -73,23 +103,37 @@
                             totalOrderPrice += res.totalPrice
                             document.getElementById("DisplayItems").innerHTML+=
                                `
-                               <div class="card">
-                                    <img src="/${res.imgUrl}" class="card-img-top" alt="..." style="width:150px;height:150px">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${res.productName}</h5>
-                                        <p class="card-text">${res.description}</p>
-                                        <p>Piece price: <b>${res.price}</b></p>
-                                        <p class="card-text">Total price:<small class="text-muted">${res.totalPrice}</small></p>
-                                        <p>Quantity: <b>${res.quantity}</b></p>
-                                            <button onclick="IncreaseItem(${res.productId})" class="btn btn-success btn-warning">
-                                            <i class="fa-solid fa-google-plus-square">+</i>
+                                <div class="col">
+                                    <div class="product-card h-100 position-relative">
+                                        <button onclick="RemoveItem(${res.productId})" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 rounded-circle shadow-sm d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; padding: 0; z-index: 2;" title="Remove Item">
+                                            <i class="bi bi-trash"></i>
                                         </button>
-                                        <button onclick="DecreaseItem(${res.productId})" class="btn btn-success btn-warning">
-                                                <i class="fa-solid fa-google-plus-square">-</i>
-                                        </button>
-                                        <button onclick="RemoveItem(${res.productId})" class="btn btn-danger btn-sm">
-                                            <i class="fa-solid fa-trash">Delete</i>
-                                        </button>
+                                        <img src="/${res.imgUrl}" class="card-img-top" alt="${res.productName}">
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title text-truncate" title="${res.productName}">${res.productName}</h5>
+                                            <p class="card-text text-muted small flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${res.description}</p>
+                                            
+                                            <div class="d-flex justify-content-between align-items-end mt-3 mb-3 pb-3 border-bottom border-light">
+                                                <div>
+                                                    <span class="text-muted small d-block">Price</span>
+                                                    <span class="fw-bold text-dark">$${res.price}</span>
+                                                </div>
+                                                <div class="text-end">
+                                                    <span class="text-muted small d-block">Total</span>
+                                                    <span class="price-tag mb-0" style="font-size: 1.2rem;">$${res.totalPrice}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between align-items-center mt-auto bg-light rounded-pill p-1">
+                                                <button onclick="DecreaseItem(${res.productId})" class="btn btn-outline-secondary rounded-circle btn-sm d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; padding: 0;">
+                                                    <i class="bi bi-dash"></i>
+                                                </button>
+                                                <span class="fw-bold mx-3">${res.quantity}</span>
+                                                <button onclick="IncreaseItem(${res.productId})" class="btn btn-primary rounded-circle btn-sm d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; padding: 0;">
+                                                    <i class="bi bi-plus-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                `
@@ -118,23 +162,37 @@
                             totalOrderPrice += res.totalPrice
                             document.getElementById("DisplayItems").innerHTML+=
                                `
-                               <div class="card">
-                                    <img src="/${res.imgUrl}" class="card-img-top" alt="..." style="width:150px;height:150px">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${res.productName}</h5>
-                                        <p class="card-text">${res.description}</p>
-                                         <p>Piece price: <b>${res.price}</b></p>
-                                        <p class="card-text">Total price:<small class="text-muted">${res.totalPrice}</small></p>
-                                        <p>Quantity: <b>${res.quantity}</b></p>
-                                            <button onclick="IncreaseItem(${res.productId})" class="btn btn-success btn-warning">
-                                            <i class="fa-solid fa-google-plus-square">+</i>
+                                <div class="col">
+                                    <div class="product-card h-100 position-relative">
+                                        <button onclick="RemoveItem(${res.productId})" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 rounded-circle shadow-sm d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; padding: 0; z-index: 2;" title="Remove Item">
+                                            <i class="bi bi-trash"></i>
                                         </button>
-                                        <button onclick="DecreaseItem(${res.productId})" class="btn btn-success btn-warning">
-                                                <i class="fa-solid fa-google-plus-square">-</i>
-                                        </button>
-                                        <button onclick="RemoveItem(${res.productId})" class="btn btn-danger btn-sm">
-                                            <i class="fa-solid fa-trash">Delete</i>
-                                        </button>
+                                        <img src="/${res.imgUrl}" class="card-img-top" alt="${res.productName}">
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title text-truncate" title="${res.productName}">${res.productName}</h5>
+                                            <p class="card-text text-muted small flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${res.description}</p>
+                                            
+                                            <div class="d-flex justify-content-between align-items-end mt-3 mb-3 pb-3 border-bottom border-light">
+                                                <div>
+                                                    <span class="text-muted small d-block">Price</span>
+                                                    <span class="fw-bold text-dark">$${res.price}</span>
+                                                </div>
+                                                <div class="text-end">
+                                                    <span class="text-muted small d-block">Total</span>
+                                                    <span class="price-tag mb-0" style="font-size: 1.2rem;">$${res.totalPrice}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between align-items-center mt-auto bg-light rounded-pill p-1">
+                                                <button onclick="DecreaseItem(${res.productId})" class="btn btn-outline-secondary rounded-circle btn-sm d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; padding: 0;">
+                                                    <i class="bi bi-dash"></i>
+                                                </button>
+                                                <span class="fw-bold mx-3">${res.quantity}</span>
+                                                <button onclick="IncreaseItem(${res.productId})" class="btn btn-primary rounded-circle btn-sm d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; padding: 0;">
+                                                    <i class="bi bi-plus-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                `
@@ -163,23 +221,37 @@
                             totalOrderPrice += res.totalPrice
                             document.getElementById("DisplayItems").innerHTML+=
                                `
-                               <div class="card">
-                                    <img src="/${res.imgUrl}" class="card-img-top" alt="..." style="width:150px;height:150px">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${res.productName}</h5>
-                                        <p class="card-text">${res.description}</p>
-                                        <p>Piece price: <b>${res.price}</b></p>
-                                        <p class="card-text">Total price:<small class="text-muted">${res.totalPrice}</small></p>
-                                        <p>Quantity: <b>${res.quantity}</b></p>
-                                            <button onclick="IncreaseItem(${res.productId})" class="btn btn-success btn-warning">
-                                            <i class="fa-solid fa-google-plus-square">+</i>
+                                <div class="col">
+                                    <div class="product-card h-100 position-relative">
+                                        <button onclick="RemoveItem(${res.productId})" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 rounded-circle shadow-sm d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; padding: 0; z-index: 2;" title="Remove Item">
+                                            <i class="bi bi-trash"></i>
                                         </button>
-                                        <button onclick="DecreaseItem(${res.productId})" class="btn btn-success btn-warning">
-                                                <i class="fa-solid fa-google-plus-square">-</i>
-                                        </button>
-                                        <button onclick="RemoveItem(${res.productId})" class="btn btn-danger btn-sm">
-                                            <i class="fa-solid fa-trash">Delete</i>
-                                        </button>
+                                        <img src="/${res.imgUrl}" class="card-img-top" alt="${res.productName}">
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title text-truncate" title="${res.productName}">${res.productName}</h5>
+                                            <p class="card-text text-muted small flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${res.description}</p>
+                                            
+                                            <div class="d-flex justify-content-between align-items-end mt-3 mb-3 pb-3 border-bottom border-light">
+                                                <div>
+                                                    <span class="text-muted small d-block">Price</span>
+                                                    <span class="fw-bold text-dark">$${res.price}</span>
+                                                </div>
+                                                <div class="text-end">
+                                                    <span class="text-muted small d-block">Total</span>
+                                                    <span class="price-tag mb-0" style="font-size: 1.2rem;">$${res.totalPrice}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between align-items-center mt-auto bg-light rounded-pill p-1">
+                                                <button onclick="DecreaseItem(${res.productId})" class="btn btn-outline-secondary rounded-circle btn-sm d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; padding: 0;">
+                                                    <i class="bi bi-dash"></i>
+                                                </button>
+                                                <span class="fw-bold mx-3">${res.quantity}</span>
+                                                <button onclick="IncreaseItem(${res.productId})" class="btn btn-primary rounded-circle btn-sm d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; padding: 0;">
+                                                    <i class="bi bi-plus-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                `

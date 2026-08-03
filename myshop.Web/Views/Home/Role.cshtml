@@ -1,10 +1,36 @@
-﻿@{
+@{
     ViewData["Title"] = "Roles";
+    ViewBag.PageTitle = "Role Management";
+    ViewBag.CardTitle = "Add New Role";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 @model RolesDTO
-<h1>Add Roles</h1>
-<form asp-action="Roles" method="Post">
-    <label asp-for="RoleName"></label>
-    <input asp-for="RoleName" class="form-control" />  
-    <button type="submit">Add</button>
-</form>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="custom-card">
+            <div class="custom-card-header">
+                <h4><i class="fa-solid fa-shield-halved me-2 text-white"></i> @ViewBag.CardTitle</h4>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Roles" method="Post">
+                    <div class="mb-4">
+                        <label asp-for="RoleName" class="form-label">
+                            <i class="fa-solid fa-tag me-1"></i> Role Name
+                        </label>
+                        <input asp-for="RoleName" class="form-control" placeholder="Enter role name..." />  
+                        <span asp-validation-for="RoleName" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-circle-plus me-1"></i> Add Role
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
