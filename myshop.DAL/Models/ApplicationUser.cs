@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using myshop.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace myshop.Entities.Models
 {
-    public class ApplicationUser:IdentityUser
+    public class ApplicationUser : IdentityUser, ISoftDelete
     {
         [Required]
         public string Name { get; set; }
@@ -16,5 +17,6 @@ namespace myshop.Entities.Models
         public string City { get; set; }
         public List<ShoppingCart> ShoppingCarts { get; set; }
         public List<OrderHeader> OrderHeaders { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

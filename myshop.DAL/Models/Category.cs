@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using myshop.DAL.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace myshop.Entities.Models
 {
-    public class Category
+    public class Category : ISoftDelete , IAuditable
     {
         public int Id { get; set; }
 
@@ -12,5 +13,8 @@ namespace myshop.Entities.Models
         public string Description { get; set; }
         public DateTime CreatedTime { get; set; } = DateTime.Now;
         public List<Product> Products { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using myshop.BLL.DTOs.Product.Admin;
 using myshop.BLL.DTOs.User;
+using myshop.BLL.Mapping.UserMapping.OutgoingData;
 using myshop.Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -19,7 +21,8 @@ namespace myshop.BLL.IServices
         public Task<IdentityResult> UpdateUserAsync(EditUserDTO editUserDTO);
         public Task LogOut();
 
-
+        public Task<IEnumerable<DisplayUserDTO>> GetAllDeletedUsers();
+        public Task<bool> RestoreUserAsync(string userId);
 
     }
 }

@@ -14,5 +14,6 @@ namespace myshop.BLL.DTOs.Category
         [MaxLength(100)]
         public string Description { get; set; }
         public DateTime CreatedAt {  get; set; } = DateTime.Now;
+        public bool IsDeleted { get; set; }
     }
 }

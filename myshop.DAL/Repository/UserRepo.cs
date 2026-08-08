@@ -12,10 +12,15 @@ namespace myshop.DAL.Repository
     public class UserRepo : GenericRepo<ApplicationUser>, IUserRepo
     {
         private readonly ApplicationDbContext _context;
-        private readonly DbSet<ApplicationUser> _dbSet;
         public UserRepo(ApplicationDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task<IEnumerable<ApplicationUser>> GetDeletedUsers()
+        {
+            var listOfDeletedUsers = await _context.ApplicationUsers.IgnoreQueryFilters().Where(p => p.IsDeleted == true).ToListAsync();
+            return listOfDeletedUsers;
         }
     }
 }

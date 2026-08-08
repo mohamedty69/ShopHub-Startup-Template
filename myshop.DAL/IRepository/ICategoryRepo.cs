@@ -8,5 +8,7 @@ namespace myshop.DAL.IRepository
     public interface ICategoryRepo : IGenericRepo<Category>
     {
         public Task<Category> FindCategoryByIdAsync(int id);
+        public Task<IEnumerable<Category>> GetDeletedCategories();
+
     }
 }

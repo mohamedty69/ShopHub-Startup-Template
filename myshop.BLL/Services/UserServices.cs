@@ -1,6 +1,7 @@
 using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using myshop.BLL.DTOs.Category;
 using myshop.BLL.DTOs.User;
 using myshop.BLL.IServices;
 using myshop.DAL.Iconfiguration;
@@ -169,6 +170,31 @@ namespace myshop.BLL.Services
         public async Task LogOut()
         {
             await _signInManager.SignOutAsync();
+        }
+        public async Task<IEnumerable<DisplayUserDTO>> GetAllDeletedUsers()
+        {
+            var listOfDeletedUsers= await _unitOfWork.Users.GetDeletedUsers();
+            var mappedList = _mapper.Map<IEnumerable<DisplayUserDTO>>(listOfDeletedUsers);
+            return mappedList;
+        }
+
+        public async Task<bool> RestoreUserAsync(string userId)
+        {
+            try
+            {
+                var listOfdeletedUsers = await GetAllDeletedUsers();
+                var deletedUser = listOfdeletedUsers.FirstOrDefault(c => c.UserID == userId);
+                deletedUser?.IsDeleted = false;
+                var mappedUser = _mapper.Map <ApplicationUser>(deletedUser);
+                var check = await _unitOfWork.Users.Update(mappedUser);
+                if (check)
+                    return true;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

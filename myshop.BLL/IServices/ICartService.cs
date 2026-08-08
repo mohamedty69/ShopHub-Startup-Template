@@ -1,4 +1,5 @@
 ﻿using myshop.BLL.DTOs.Cart;
+using myshop.BLL.DTOs.Product.Admin;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +14,7 @@ namespace myshop.BLL.IServices
         public IEnumerable<CartItem> DecreaseQuantityOfItem(int id);
         public bool DeleteCart();
         public IEnumerable<CartItem> GetCartItems();
+        
 
     }
 }

@@ -15,9 +15,9 @@ namespace myshop.Entities.Models
         [ValidateNever]
         public OrderHeader OrderHeader { get; set; }
 
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
         [ValidateNever]
-        public Product Product { get; set; }
+        public Product? Product { get; set; }
 
         public decimal Price { get; set; }
 

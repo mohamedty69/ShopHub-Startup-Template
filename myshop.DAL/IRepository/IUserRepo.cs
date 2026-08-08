@@ -8,5 +8,7 @@ namespace myshop.DAL.IRepository
 {
     public interface IUserRepo : IGenericRepo<ApplicationUser>
     {
+        public Task<IEnumerable<ApplicationUser>> GetDeletedUsers();
+
     }
 }

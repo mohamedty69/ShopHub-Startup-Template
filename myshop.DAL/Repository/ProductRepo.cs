@@ -86,6 +86,11 @@ namespace myshop.DAL.Repository
             }
             return null;
         }
-        
+
+        public async Task<IEnumerable<Product>> GetDeletedProducts()
+        {
+            var listOfDeletedProducts = await _context.Products.IgnoreQueryFilters().Where(p => p.IsDeleted == true).ToListAsync();
+            return listOfDeletedProducts;
+        }
     }
 }

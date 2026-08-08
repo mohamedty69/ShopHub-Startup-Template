@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.Extensions.Caching.Memory;
 using myshop.BLL.DTOs.Category;
+using myshop.BLL.DTOs.Product.Admin;
 using myshop.BLL.IServices;
 using myshop.DAL.Iconfiguration;
 using myshop.Entities.Models;
@@ -76,6 +77,31 @@ namespace myshop.BLL.Services
                 return true;
             }
             return false;
+        }
+        public async Task<IEnumerable<CategoryDTO>> GetAllDeletedCategories()
+        {
+            var listOfDeletedCategories = await _unitOfWork.Products.GetDeletedProducts();
+            var mappedList = _mapper.Map<IEnumerable<CategoryDTO>>(listOfDeletedCategories);
+            return mappedList;
+        }
+
+        public async Task<bool> RestoreCategoryAsync(int categoryId)
+        {
+            try
+            {
+                var listOfdeletedCategories= await GetAllDeletedCategories();
+                var deletedCategory = listOfdeletedCategories.FirstOrDefault(c => c.Id == categoryId);
+                deletedCategory?.IsDeleted = false;
+                var mappedCategory= _mapper.Map<Category>(deletedCategory);
+                var check = await _unitOfWork.Categories.Update(mappedCategory);
+                if (check)
+                    return true;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

@@ -130,5 +130,31 @@ namespace myshop.BLL.Services
                 throw new NullReferenceException(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<DisplayProductDTO>> GetAllDeletedProducts()
+        {
+            var listOfDeletedProducts = await _unitOfWork.Products.GetDeletedProducts();
+            var mappedList = _mapper.Map<IEnumerable<DisplayProductDTO>>(listOfDeletedProducts);
+            return mappedList;
+        }
+
+        public async Task<bool> RestoreProductAsync(int productId)
+        {
+            try
+            {
+                var listOfdeletedProducts = await GetAllDeletedProducts();
+                var deletedProduct = listOfdeletedProducts.FirstOrDefault(p => p.Id == productId);
+                deletedProduct?.IsDeleted = false;
+                var mappedProduct = _mapper.Map<Product>(deletedProduct);
+                var check = await _unitOfWork.Products.Update(mappedProduct);
+                if (check)
+                    return true;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

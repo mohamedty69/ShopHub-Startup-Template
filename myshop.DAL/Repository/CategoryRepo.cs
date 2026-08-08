@@ -9,7 +9,7 @@ using System.Text;
 
 namespace myshop.DAL.Repository
 {
-    public class CategoryRepo : GenericRepo<Category> , ICategoryRepo
+    public class CategoryRepo : GenericRepo<Category>, ICategoryRepo
     {
         private readonly ApplicationDbContext _context;
         public CategoryRepo(ApplicationDbContext context) : base(context)
@@ -45,6 +45,12 @@ namespace myshop.DAL.Repository
         public override Task<bool> Delete(int id)
         {
             return base.Delete(id);
+        }
+
+        public async Task<IEnumerable<Category>> GetDeletedCategories()
+        {
+            var listOfDeletedCategories = await _context.Categories.IgnoreQueryFilters().Where(c => c.IsDeleted == true).ToListAsync();
+            return listOfDeletedCategories;
         }
     }
 }

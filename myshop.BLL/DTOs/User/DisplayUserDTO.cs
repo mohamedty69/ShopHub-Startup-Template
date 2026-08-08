@@ -17,5 +17,6 @@ namespace myshop.BLL.DTOs.User
         public string Role { get; set; }
         public bool IsLocked { get; set; } = false;
         public string RoleName { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

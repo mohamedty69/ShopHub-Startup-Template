@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using myshop.DAL.Models;
 using myshop.Entities.Models;
 
 namespace myshop.DataAccess
@@ -20,49 +22,45 @@ namespace myshop.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        }
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
 
-            modelBuilder.Entity<Product>()
-                .HasOne(p => p.Category)
-                .WithMany(c => c.Products)
-                .HasForeignKey(p => p.CategoryId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<OrderDetail>()
-                .HasOne(od => od.OrderHeader)
-                .WithMany(oh => oh.OrderDetails)
-                .HasForeignKey(od => od.OrderHeaderId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<OrderDetail>()
-                .HasOne(od => od.Product)
-                .WithMany(p => p.OrderDetails)
-                .HasForeignKey(od => od.ProductId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<OrderHeader>()
-                .HasOne(oh => oh.ApplicationUser)
-                .WithMany(u => u.OrderHeaders)
-                .HasForeignKey(oh => oh.ApplicationUserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<ShoppingCart>()
-                .HasOne(sc => sc.ApplicationUser)
-                .WithMany(u => u.ShoppingCarts)
-                .HasForeignKey(sc => sc.ApplicationUserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<ShoppingCart>()
-                .HasOne(sc => sc.Product)
-                .WithMany(p => p.ShoppingCarts)
-                .HasForeignKey(sc => sc.ProductId)
-                .OnDelete(DeleteBehavior.Restrict);
-            
-            modelBuilder.Entity<Product>().Property(p => p.Price)
-                .HasPrecision(18, 2);
-            modelBuilder.Entity<OrderHeader>().Property(h => h.TotalPrice)
-                .HasPrecision(18, 2);
-            modelBuilder.Entity<OrderDetail>().Property(o => o.Price)
-                .HasPrecision(18, 2);
+            ApplySoftDelete();
+            ApplyAudite();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+        public override int SaveChanges()
+        {
+            ApplySoftDelete();
+            ApplyAudite();
+            return base.SaveChanges();
+        }
+        private void ApplySoftDelete()
+        {
+            foreach (var entity in ChangeTracker.Entries<ISoftDelete>())
+            {
+                if (entity.State == EntityState.Deleted)
+                {
+                    entity.State = EntityState.Modified;
+                    entity.Entity.IsDeleted = true;
+                }
+            }
+        }
+       private void ApplyAudite()
+        {
+            foreach (var entity in ChangeTracker.Entries<IAuditable>())
+            {
+                if (entity.State == EntityState.Added)
+                {
+                    entity.Entity.CreatedAt= DateTime.UtcNow;
+                }
+                else if (entity.State == EntityState.Modified)
+                {
+                    entity.Entity.UpdatedAt = DateTime.UtcNow;
+                }
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using myshop.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace myshop.Entities.Models
 {
-    public class Product
+    public class Product : ISoftDelete , IAuditable
     {
         public int Id { get; set; }
 
@@ -31,5 +32,8 @@ namespace myshop.Entities.Models
         public Category Category { get; set; }
         public List<ShoppingCart> ShoppingCarts { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }
