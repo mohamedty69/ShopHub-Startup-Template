@@ -11,6 +11,8 @@ namespace myshop.DAL.Iconfiguration
         public IUserRepo Users { get; }
         public ICategoryRepo Categories { get; }
         public IProductRepo Products { get; }   
+        public IOrderHeaderRepo orderHeaderRepo { get; }
+        public IOrderDetailRepo orderDetailRepo { get; }
         public Task CompleteTask();
     }
 }

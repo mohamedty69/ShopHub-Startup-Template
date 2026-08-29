@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using myshop.BLL.DTOs.Order;
 using myshop.BLL.IServices;
+using myshop.BLL.Mapping.OrderMapping.OutgoingData;
 using myshop.BLL.Mapping.ProductMapping.IncomingData;
 using myshop.BLL.Mapping.ProductMapping.IncomingData.Admin;
 using myshop.BLL.Mapping.ProductMapping.OutgoingData.Admin;
@@ -11,6 +13,8 @@ using myshop.BLL.Mapping.UserMapping.OutgoingData;
 using myshop.BLL.Services;
 using myshop.DAL.Data;
 using myshop.DAL.Iconfiguration;
+using myshop.DAL.IRepository;
+using myshop.DAL.Repository;
 using myshop.DataAccess;
 using myshop.Entities.Models;
 using Stripe;
@@ -35,13 +39,16 @@ builder.Services.AddAutoMapper(cfg => { },
 typeof(RegisterMapping),typeof(DisplayUserMapping),
 typeof(CreateProductProfile),typeof(DisplayProductProfile),
 typeof(EditProductProfile),typeof(UpdateProductProfile)
-,typeof(DisplayProductForCustomerProfile));
+,typeof(DisplayProductForCustomerProfile),typeof(CreateProductProfile),
+typeof(SummaryOrderProfile),typeof(OrderItemsProfile));
 builder.Services.AddScoped<IFileService, myshop.BLL.Services.FileService>();
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, myshop.BLL.Services.ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderHeaderRepo, OrderHeaderRepo>();
+builder.Services.AddScoped<IOrderDetailRepo, OrderDetailRepo>();
 
 builder.Services.AddHttpContextAccessor();
 

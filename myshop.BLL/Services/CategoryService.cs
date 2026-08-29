@@ -80,7 +80,7 @@ namespace myshop.BLL.Services
         }
         public async Task<IEnumerable<CategoryDTO>> GetAllDeletedCategories()
         {
-            var listOfDeletedCategories = await _unitOfWork.Products.GetDeletedProducts();
+            var listOfDeletedCategories = await _unitOfWork.Categories.GetDeletedCategories();
             var mappedList = _mapper.Map<IEnumerable<CategoryDTO>>(listOfDeletedCategories);
             return mappedList;
         }

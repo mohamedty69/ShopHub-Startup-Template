@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using myshop.DAL.Enum;
 using myshop.DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,8 @@ namespace myshop.Entities.Models
 
         public decimal TotalPrice { get; set; }
 
-        public string? OrderStatus { get; set; }
-        public string? PaymentStatus { get; set; }
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
+        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Pending;
 
         public string? TrackingNumber { get; set; }
         public string? Carrier { get;set; }

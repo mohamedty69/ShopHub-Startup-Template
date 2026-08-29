@@ -9,6 +9,8 @@ namespace myshop.DAL.IRepository
     {
         public Task<Category> FindCategoryByIdAsync(int id);
         public Task<IEnumerable<Category>> GetDeletedCategories();
+        public Task<Category> GetDeletedCategory(int categoryId);
+
 
     }
 }

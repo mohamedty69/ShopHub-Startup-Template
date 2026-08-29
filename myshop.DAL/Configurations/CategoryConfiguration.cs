@@ -12,7 +12,7 @@ namespace myshop.DAL.Configurations
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.Property(c => c.Name).IsRequired();
-            builder.HasQueryFilter(c => c.IsDeleted == true);
+            builder.HasQueryFilter(c => c.IsDeleted == false);
         }
     }
 }

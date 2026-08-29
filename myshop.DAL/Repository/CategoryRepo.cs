@@ -52,5 +52,10 @@ namespace myshop.DAL.Repository
             var listOfDeletedCategories = await _context.Categories.IgnoreQueryFilters().Where(c => c.IsDeleted == true).ToListAsync();
             return listOfDeletedCategories;
         }
+        public async Task<Category> GetDeletedCategory(int categoryId)
+        {
+            var categoryProduct = await _context.Categories.IgnoreQueryFilters().FirstOrDefaultAsync(p => p.Id == categoryId && p.IsDeleted);
+            return categoryProduct ?? throw new Exception("Can not find the product");
+        }
     }
 }

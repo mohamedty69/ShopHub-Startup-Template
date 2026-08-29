@@ -142,8 +142,7 @@ namespace myshop.BLL.Services
         {
             try
             {
-                var listOfdeletedProducts = await GetAllDeletedProducts();
-                var deletedProduct = listOfdeletedProducts.FirstOrDefault(p => p.Id == productId);
+                var deletedProduct = await _unitOfWork.Products.GetDeletedProduct(productId);
                 deletedProduct?.IsDeleted = false;
                 var mappedProduct = _mapper.Map<Product>(deletedProduct);
                 var check = await _unitOfWork.Products.Update(mappedProduct);

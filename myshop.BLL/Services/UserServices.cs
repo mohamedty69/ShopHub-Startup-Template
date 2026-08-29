@@ -8,6 +8,7 @@ using myshop.DAL.Iconfiguration;
 using myshop.Entities.Models;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 
 namespace myshop.BLL.Services
@@ -54,7 +55,7 @@ namespace myshop.BLL.Services
                     throw new Exception($"Your account is locked out. Please try again later after {await _userManager.GetLockoutEndDateAsync(userexist)}.");
                 var result = await _signInManager.PasswordSignInAsync(userexist, log.Password, log.IsPersistent, false);
                 if (result.Succeeded)
-                {
+                { 
                     await _userManager.ResetAccessFailedCountAsync(userexist);
                     return result;
                 }

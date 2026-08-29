@@ -15,7 +15,7 @@ namespace myshop.DAL.Configurations
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade);
-            builder.HasQueryFilter(p => p.IsDeleted == true);
+            builder.HasQueryFilter(p => p.IsDeleted == false);
             builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
             builder.Property(p => p.Price).IsRequired().HasPrecision(18, 2);
         }
