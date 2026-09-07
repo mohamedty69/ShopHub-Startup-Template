@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Order Confirmation</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header { background-color: #2196F3; color: #ffffff; text-align: center; padding: 30px 20px; }
+        .header h1 { margin: 0; font-size: 28px; }
+        .content { padding: 30px; color: #333333; line-height: 1.6; }
+        .content h2 { color: #2196F3; }
+        .order-details { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
+        .order-details th, .order-details td { padding: 12px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+        .order-details th { background-color: #f9f9f9; color: #555555; }
+        .total-row { font-weight: bold; background-color: #f9f9f9; }
+        .button { display: inline-block; padding: 12px 24px; background-color: #2196F3; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 20px; }
+        .footer { background-color: #f4f4f4; text-align: center; padding: 20px; font-size: 12px; color: #888888; border-top: 1px solid #e0e0e0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Order Confirmed!</h1>
+        </div>
+        <div class="content">
+            <h2>Hi {{CustomerName}},</h2>
+            <p>Thank you for your order! We're preparing it for shipment. Below are the details of your purchase.</p>
+            
+            <p><strong>Order Number:</strong> #{{OrderId}}<br>
+            <strong>Order Date:</strong> {{OrderDate}}</p>
+
+            <table class="order-details">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Example row for template replacement -->
+                    {{#each OrderItems}}
+                    <tr>
+                        <td>{{ProductName}}</td>
+                        <td>{{Quantity}}</td>
+                        <td>{{Price}}</td>
+                    </tr>
+                    {{/each}}
+                    <tr class="total-row">
+                        <td colspan="2" style="text-align: right;">Total:</td>
+                        <td>{{TotalAmount}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><strong>Shipping Address:</strong><br>
+            {{ShippingAddress}}</p>
+
+            <div style="text-align: center;">
+                <a href="{{OrderTrackingUrl}}" class="button">Track Your Order</a>
+            </div>
+            
+            <p style="margin-top: 30px;">If you have any questions about your order, please reply to this email.</p>
+            <p>Best regards,<br>The ShopHub Team</p>
+        </div>
+        <div class="footer">
+            &copy; {{CurrentYear}} ShopHub. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>

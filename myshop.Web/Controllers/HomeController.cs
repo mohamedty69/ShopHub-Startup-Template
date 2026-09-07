@@ -11,12 +11,14 @@ namespace myshop.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
 
         public HomeController(ILogger<HomeController> logger,
-            IUserService userService)
+            IUserService userService, IEmailService emailService)
         {
             _logger = logger;
             _userService = userService;
+            _emailService = emailService;
         }
 
         #region Register
@@ -31,7 +33,10 @@ namespace myshop.Web.Controllers
             {
                 var check = await _userService.RegisterAsync(register);
                 if (check.Succeeded)
+                {
+                    await _emailService.SendWelcomeEmailAsync(register.Email, register.UserName);
                     return View("Login");
+                }
                 else
                 {
                     foreach (var error in check.Errors)

@@ -32,6 +32,7 @@ namespace myshop.Entities.Models
         public Category Category { get; set; }
         public List<ShoppingCart> ShoppingCarts { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
+        public List<Review> Reviews { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

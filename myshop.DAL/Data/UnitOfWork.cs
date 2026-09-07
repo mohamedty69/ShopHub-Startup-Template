@@ -19,7 +19,7 @@ namespace myshop.DAL.Data
 
         public IOrderHeaderRepo orderHeaderRepo {  get; private set; }
         public IOrderDetailRepo orderDetailRepo { get; private set; }
-
+        public IReviewRepo reviewRepo { get; private set; }
 
         private readonly ApplicationDbContext _context;
         public UnitOfWork(ApplicationDbContext context
@@ -31,6 +31,7 @@ namespace myshop.DAL.Data
             Products = new ProductRepo(_context);
             orderHeaderRepo = new OrderHeaderRepo(_context);
             orderDetailRepo = new OrderDetailRepo(_context);
+            reviewRepo = new ReviewRepo(_context);
         }
         public async Task CompleteTask()
         {

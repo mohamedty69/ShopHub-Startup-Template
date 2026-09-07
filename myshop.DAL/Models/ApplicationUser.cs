@@ -17,6 +17,7 @@ namespace myshop.Entities.Models
         public string City { get; set; }
         public List<ShoppingCart> ShoppingCarts { get; set; }
         public List<OrderHeader> OrderHeaders { get; set; }
+        public List<Review> Reviews { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

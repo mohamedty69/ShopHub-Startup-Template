@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using myshop.BLL.DTOs.Email;
 using myshop.BLL.DTOs.Order;
 using myshop.BLL.IServices;
 using myshop.BLL.Mapping.OrderMapping.OutgoingData;
@@ -34,7 +35,7 @@ builder.Services.AddIdentity<ApplicationUser,IdentityRole>(
     ).AddDefaultTokenProviders().AddDefaultUI()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
+builder.Services.Configure<StmpSettings>(builder.Configuration.GetSection("StmpConfig"));
 builder.Services.AddAutoMapper(cfg => { },
 typeof(RegisterMapping),typeof(DisplayUserMapping),
 typeof(CreateProductProfile),typeof(DisplayProductProfile),
@@ -49,6 +50,7 @@ builder.Services.AddScoped<IProductService, myshop.BLL.Services.ProductService>(
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderHeaderRepo, OrderHeaderRepo>();
 builder.Services.AddScoped<IOrderDetailRepo, OrderDetailRepo>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddHttpContextAccessor();
 

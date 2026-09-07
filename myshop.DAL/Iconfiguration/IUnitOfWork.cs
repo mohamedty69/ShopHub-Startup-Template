@@ -13,6 +13,7 @@ namespace myshop.DAL.Iconfiguration
         public IProductRepo Products { get; }   
         public IOrderHeaderRepo orderHeaderRepo { get; }
         public IOrderDetailRepo orderDetailRepo { get; }
+        public IReviewRepo reviewRepo { get; }
         public Task CompleteTask();
     }
 }
