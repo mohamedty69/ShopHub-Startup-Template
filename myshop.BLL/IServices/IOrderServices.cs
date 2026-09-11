@@ -7,7 +7,8 @@ namespace myshop.BLL.IServices
 {
     public interface IOrderServices
     {
-       public Task<bool> PlaceOrderAsync(string userId, CheckOutOrderDTO checkoutInfo);
-       public Task<IEnumerable<SummaryOrderDTO>> GetUserOrdersAsync(string userId);
+       public Task<int> PlaceOrderAsync(string userId, CheckOutOrderDTO checkoutInfo);
+       public Task<SummaryOrderDTO> GetUserOrdersAsync(int orderId);
+        public Task<IEnumerable<SummaryOrderDTO>> GetAllUsersOrder(string userId);
     }
 }

@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using myshop.BLL.DTOs.Email;
 using myshop.BLL.DTOs.Order;
+using myshop.BLL.DTOs.ReviewDTO;
 using myshop.BLL.IServices;
 using myshop.BLL.Mapping.OrderMapping.OutgoingData;
 using myshop.BLL.Mapping.ProductMapping.IncomingData;
 using myshop.BLL.Mapping.ProductMapping.IncomingData.Admin;
 using myshop.BLL.Mapping.ProductMapping.OutgoingData.Admin;
 using myshop.BLL.Mapping.ProductMapping.OutgoingData.Customer;
+using myshop.BLL.Mapping.ReviewMapping.IncommingData;
+using myshop.BLL.Mapping.ReviewMapping.OutgoingData;
 using myshop.BLL.Mapping.UserMapping.IncomingData;
 using myshop.BLL.Mapping.UserMapping.OutgoingData;
 using myshop.BLL.Services;
@@ -41,16 +44,17 @@ typeof(RegisterMapping),typeof(DisplayUserMapping),
 typeof(CreateProductProfile),typeof(DisplayProductProfile),
 typeof(EditProductProfile),typeof(UpdateProductProfile)
 ,typeof(DisplayProductForCustomerProfile),typeof(CreateProductProfile),
-typeof(SummaryOrderProfile),typeof(OrderItemsProfile));
+typeof(SummaryOrderProfile),typeof(OrderItemsProfile),
+typeof(CreateReviewProfile), typeof(EditReviewProfile),typeof(DisplayReviewProfile));
 builder.Services.AddScoped<IFileService, myshop.BLL.Services.FileService>();
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, myshop.BLL.Services.ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
-builder.Services.AddScoped<IOrderHeaderRepo, OrderHeaderRepo>();
-builder.Services.AddScoped<IOrderDetailRepo, OrderDetailRepo>();
+builder.Services.AddScoped<IOrderServices, OrderServices>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IReviewService, myshop.BLL.Services.ReviewService>();
 
 builder.Services.AddHttpContextAccessor();
 

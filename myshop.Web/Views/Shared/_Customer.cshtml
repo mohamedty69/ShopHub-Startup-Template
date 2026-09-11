@@ -116,15 +116,15 @@
 </head>
 <body>
     @{
-        int cartCount = 0;
-        try 
-        {
-            var cartItems = CartService.GetCartItems();
-            if (cartItems != null)
+            int cartCount = 0;
+            try 
             {
-                cartCount = cartItems.Sum(x => x.Quantity);
+                var cartItems = CartService.GetCartItems();
+                if (cartItems != null)
+                {
+                    cartCount = cartItems.Sum(x => x.Quantity);
+                }
             }
-        }
         catch (Exception)
         {
             // CartService throws an exception if cart is empty. We gracefully handle it here by keeping cartCount at 0.
@@ -154,7 +154,7 @@
                             Settings
                         </a>
                         <ul class="dropdown-menu border-0 shadow-sm rounded-3" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item py-2" href="#"><i class="bi bi-box-seam me-2"></i>My Orders</a></li>
+                            <li><a class="dropdown-item py-2" href="/Customer/MyOrders"><i class="bi bi-box-seam me-2"></i>My Orders</a></li>
                             <li><hr class="dropdown-divider" /></li>
                             <li><a class="dropdown-item py-2" href="/Identity/Account/Manage"><i class="bi bi-person me-2"></i>Edit Profile</a></li>
                         </ul>

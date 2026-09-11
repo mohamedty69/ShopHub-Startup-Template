@@ -17,11 +17,18 @@ namespace myshop.DAL.Repository
            _context = context;
         }
 
-        public async Task<IEnumerable<OrderHeader>> GetOrderByUserIdAsync(string userId)
+        public async Task<IEnumerable<OrderHeader>> GetAllOrdersByUserIdAsync(string userId)
         {
             var userOrder = await _context.OrderHeaders.Where(o => o.ApplicationUserId == userId)
                 .Include(od => od.OrderDetails).ThenInclude(p => p.Product).ToListAsync();
             return userOrder ?? throw new NullReferenceException("Can not find the order");
+        }
+
+        public async Task<OrderHeader> GetOrderByUserIdAsync(int orderId)
+        {
+            var order = await _context.OrderHeaders.Where(o => o.Id == orderId).
+                Include(o => o.OrderDetails).ThenInclude(p => p.Product).AsNoTracking().FirstOrDefaultAsync();
+            return order ?? throw new NullReferenceException("Order can not be found");
         }
     }
 }

@@ -19,5 +19,6 @@ namespace myshop.BLL.IServices
         public Task<bool> DeleteProductAsync(int id);
         public Task<IEnumerable<DisplayProductDTO>> GetAllDeletedProducts();
         public Task<bool> RestoreProductAsync(int productId);
+        Task<DisplayProductDetailsDTO> GetProductDetailsForCustomerAsync(int productId);
     }
 }

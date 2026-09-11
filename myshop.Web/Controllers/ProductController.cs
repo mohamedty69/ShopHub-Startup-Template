@@ -140,7 +140,6 @@ namespace myshop.Web.Controllers
             }
             return Json(new { success = false, message = "Error while Deleting" });
         }
-
-
+        
     }
 }

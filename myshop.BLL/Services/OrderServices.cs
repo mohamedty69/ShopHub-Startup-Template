@@ -26,13 +26,21 @@ namespace myshop.BLL.Services
             _mapper = mapper;
             _cartService = cartService;
         }
-        public async Task<IEnumerable<SummaryOrderDTO>> GetUserOrdersAsync(string userId)
+
+        public async Task<IEnumerable<SummaryOrderDTO>> GetAllUsersOrder(string userId)
         {
-            var userOrder =await _unitOfWork.orderHeaderRepo.GetOrderByUserIdAsync(userId);
-            var mappedOrder = _mapper.Map<IEnumerable<SummaryOrderDTO>>(userOrder);
+            var usersOrderList = await _unitOfWork.orderHeaderRepo.GetAllOrdersByUserIdAsync( userId );
+            var mappedOrders = _mapper.Map<IEnumerable<SummaryOrderDTO>>( usersOrderList );
+            return mappedOrders;
+        }
+
+        public async Task<SummaryOrderDTO> GetUserOrdersAsync(int orderId)
+        {
+            var userOrder =await _unitOfWork.orderHeaderRepo.GetOrderByUserIdAsync(orderId);
+            var mappedOrder = _mapper.Map<SummaryOrderDTO>(userOrder);
             return mappedOrder;
         }
-        public async Task<bool> PlaceOrderAsync(string userId, CheckOutOrderDTO checkoutInfo)
+        public async Task<int> PlaceOrderAsync(string userId, CheckOutOrderDTO checkoutInfo)
         {
             var mappedOrder = _mapper.Map<OrderHeader>(checkoutInfo);
             var cartItems = _cartService.GetCartItems();
@@ -59,12 +67,12 @@ namespace myshop.BLL.Services
                     }
                 }
                 if(!orderDetailCheck)
-                    return false;
+                    return 0;
                 await _unitOfWork.CompleteTask();
                 _cartService.DeleteCart();
-                return true;
+                return mappedOrder.Id;
             }
-            return false;
+            return 0;
         }
     }
 }

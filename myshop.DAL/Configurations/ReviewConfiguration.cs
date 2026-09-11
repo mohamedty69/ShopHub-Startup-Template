@@ -19,6 +19,11 @@ namespace myshop.DAL.Configurations
                 .WithMany(r => r.Reviews)
                 .HasForeignKey(a => a.productId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Property(r => r.comment).HasMaxLength(500);
+            builder.HasIndex(r => new { r.userId, r.productId }).IsUnique();
+            builder.ToTable(t => t.HasCheckConstraint("CK_Review_Rating", "rating >= 1 AND rating <= 5"));
+            builder.HasQueryFilter(r => !r.IsDeleted);
         }
     }
 }

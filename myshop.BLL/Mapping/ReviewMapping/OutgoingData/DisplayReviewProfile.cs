@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+using AutoMapper;
+using myshop.BLL.DTOs.ReviewDTO;
 using myshop.DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -6,9 +7,9 @@ using System.Text;
 
 namespace myshop.BLL.Mapping.ReviewMapping.OutgoingData
 {
-    public class DisplayReviewDTO : Profile
+    public class DisplayReviewProfile : Profile
     {
-        public DisplayReviewDTO()
+        public DisplayReviewProfile()
         {
             CreateMap<Review, DisplayReviewDTO>();
         }

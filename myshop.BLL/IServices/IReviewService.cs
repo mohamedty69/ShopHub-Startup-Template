@@ -12,5 +12,8 @@ namespace myshop.BLL.IServices
         public Task<bool> DeleteReviewAsync(int reviewId);
         public Task<IEnumerable<DisplayReviewDTO>> GetAllReviewsAsync();
         public Task<bool> HasUserReviewedProductAsync(int productId, string userId);
+        public Task<string> GetUserIdUsingReviewId(int reviewId);
+        public Task<int> GetProductIdUsingReviewId(int reviewId);
+
     }
 }

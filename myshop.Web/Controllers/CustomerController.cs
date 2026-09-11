@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using myshop.BLL.DTOs.Product.Customer;
 using myshop.BLL.IServices;
 using System.Text.Json;
+using System.Security.Claims;
 
 namespace myshop.PL.Controllers
 {
@@ -13,12 +14,14 @@ namespace myshop.PL.Controllers
         private readonly IUserService _userService;
         private readonly IProductService _productService;
         private readonly ICartService _cartService;
-        public CustomerController(IUserService userService, IProductService productService,
+        private readonly IOrderServices _orderService; 
+        public CustomerController(IOrderServices orderService, IUserService userService, IProductService productService,
             ICartService cartService)
         {
             _userService= userService;
             _productService = productService;
             _cartService = cartService;
+            _orderService = orderService;
         }
         [HttpGet]
         public async Task<IActionResult> DisplayProducts()
@@ -73,6 +76,26 @@ namespace myshop.PL.Controllers
         {
             var result = _cartService.DeleteCart();
             return RedirectToAction("DisplayProducts");
+        }
+        public async Task<IActionResult> GetUserOrders(string userId)
+        {
+            var userOrders = await _orderService.GetAllUsersOrder(userId);
+            return View("MyOrders", userOrders);
+        }
+        public async Task<IActionResult> MyOrders()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("LoginUser", "Home" );
+            }
+            var userOrders = await _orderService.GetAllUsersOrder(userId);
+            return View("MyOrders", userOrders);
+        }
+        public async Task<IActionResult> DisplayProductDetails(int id)
+        {
+            var productDetails = await _productService.GetProductDetailsForCustomerAsync(id);
+            return View(productDetails);
         }
     }
 }

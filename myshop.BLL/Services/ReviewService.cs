@@ -10,12 +10,12 @@ using System.Text;
 
 namespace myshop.BLL.Services
 {
-    public class ReviewaService : IReviewService
+    public class ReviewService : IReviewService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ReviewaService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ReviewService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -58,9 +58,8 @@ namespace myshop.BLL.Services
                 throw new NullReferenceException("The review can not be found");
             if (existingReview.comment != editReviewDto.comment || existingReview.rating != editReviewDto.rating )
             {
-                existingReview.comment = editReviewDto.comment;
-                existingReview.rating = editReviewDto.rating?? throw new NullReferenceException("Rating field can not be null");
-                await _unitOfWork.reviewRepo.Update(existingReview);
+                var mappedReview = _mapper.Map<Review>(editReviewDto);
+                await _unitOfWork.reviewRepo.Update(mappedReview);
                 await _unitOfWork.CompleteTask();
                 return true;
             }
@@ -77,6 +76,17 @@ namespace myshop.BLL.Services
         {
             var check = await _unitOfWork.reviewRepo.GetReviewUsingUserIdAndProductId(userId, productId);
             return check;
+        }
+
+        public async Task<string> GetUserIdUsingReviewId(int reviewId)
+        {
+            var review = await _unitOfWork.reviewRepo.GetById(reviewId);
+            return review.userId;
+        }
+        public async Task<int> GetProductIdUsingReviewId(int reviewId)
+        {
+            var review = await _unitOfWork.reviewRepo.GetById(reviewId);
+            return review.productId;
         }
     }
 }

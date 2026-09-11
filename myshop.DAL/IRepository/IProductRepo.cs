@@ -13,6 +13,7 @@ namespace myshop.DAL.IRepository
         public Expression<Func<Product,object>> GetSortName(string sortColumn);
         public Task<IEnumerable<Product>> GetDeletedProducts();
         public Task<Product> GetDeletedProduct(int productId);
+        public Task<Product> GetProductDetails(int productId);
 
     }
 }

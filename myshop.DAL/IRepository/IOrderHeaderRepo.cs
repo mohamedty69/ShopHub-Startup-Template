@@ -7,6 +7,7 @@ namespace myshop.DAL.IRepository
 {
     public interface IOrderHeaderRepo : IGenericRepo<OrderHeader>
     {
-        public Task<IEnumerable<OrderHeader>> GetOrderByUserIdAsync(string userId);
+        public Task<IEnumerable<OrderHeader>> GetAllOrdersByUserIdAsync(string userId);
+        public Task<OrderHeader> GetOrderByUserIdAsync(int orderId);
     }
 }

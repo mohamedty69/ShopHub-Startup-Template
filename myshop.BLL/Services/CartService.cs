@@ -111,7 +111,7 @@ namespace myshop.BLL.Services
                     var deserializedListOfItems = JsonSerializer.Deserialize<IEnumerable<CartItem>>(jsonCartItems);
                     return deserializedListOfItems ?? throw new NullReferenceException();
                 }
-                throw new NullReferenceException("Add items to cart first");
+                return Enumerable.Empty<CartItem>();
             }
             catch (Exception ex)
             {

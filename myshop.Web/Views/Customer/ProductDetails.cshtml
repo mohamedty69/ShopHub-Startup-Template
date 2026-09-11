@@ -1,0 +1,7 @@
+@model myshop.BLL.DTOs.Product.Customer.DisplayProductDetailsDTO
+@{
+    Layout = "_Customer";
+    ViewData["Title"] = Model?.ProductName ?? "Product Details";
+}
+
+<partial name="DisplayProductDetails" model="Model" />

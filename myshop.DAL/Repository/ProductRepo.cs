@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using myshop.DAL.IRepository;
 using myshop.DataAccess;
 using myshop.Entities.Models;
@@ -97,6 +97,13 @@ namespace myshop.DAL.Repository
         {
             var DeletedProduct = await _context.Products.IgnoreQueryFilters().FirstOrDefaultAsync(p => p.Id == productId && p.IsDeleted);
             return DeletedProduct?? throw new Exception("Can not find the product");
+        }
+
+        public async Task<Product> GetProductDetails(int productId)
+        {
+            var product = await _context.Products.Where(p => p.Id == productId)
+                .Include(r => r.Reviews).ThenInclude(a => a.ApplicationUser).AsNoTracking().FirstOrDefaultAsync();
+            return product?? throw new NullReferenceException("The product does not exist");
         }
     }
 }

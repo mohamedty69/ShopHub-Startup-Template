@@ -19,13 +19,10 @@ namespace myshop.DAL.Repository
 
         public async Task<bool> GetReviewUsingUserIdAndProductId(string userId, int productId)
         {
-            var reviewWithUserId = await _context.Reviews.FirstOrDefaultAsync(r => r.userId == userId);
-            var reviewWithProductId = await _context.Reviews.FirstOrDefaultAsync( r => r.productId == productId);
-            if (reviewWithUserId != null || reviewWithProductId == null)
-                return false;
-            if (reviewWithUserId.reviewId == reviewWithProductId.reviewId)
-                return true;
-            return false;
+            return await _context.Reviews
+        .AnyAsync(r => r.userId == userId && r.productId == productId);
         }
+
+        
     }
 }

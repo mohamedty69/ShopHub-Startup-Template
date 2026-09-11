@@ -1,71 +1,231 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Order Confirmation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - AuraShop</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
-        .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .header { background-color: #2196F3; color: #ffffff; text-align: center; padding: 30px 20px; }
-        .header h1 { margin: 0; font-size: 28px; }
-        .content { padding: 30px; color: #333333; line-height: 1.6; }
-        .content h2 { color: #2196F3; }
-        .order-details { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
-        .order-details th, .order-details td { padding: 12px; text-align: left; border-bottom: 1px solid #e0e0e0; }
-        .order-details th { background-color: #f9f9f9; color: #555555; }
-        .total-row { font-weight: bold; background-color: #f9f9f9; }
-        .button { display: inline-block; padding: 12px 24px; background-color: #2196F3; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 20px; }
-        .footer { background-color: #f4f4f4; text-align: center; padding: 20px; font-size: 12px; color: #888888; border-top: 1px solid #e0e0e0; }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f1f5f9;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        .wrapper {
+            width: 100%;
+            background-color: #f1f5f9;
+            padding: 40px 0;
+        }
+        .container {
+            max-width: 620px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            background-color: #1e3a8a;
+            color: #ffffff;
+            text-align: center;
+            padding: 36px 24px;
+        }
+        .brand-name {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin: 0 0 6px 0;
+            text-transform: uppercase;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 8px 0 0 0;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+        .content {
+            padding: 32px 30px;
+            color: #334155;
+            line-height: 1.6;
+        }
+        .greeting {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        .info-card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 20px 0;
+        }
+        .info-card table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .info-card td {
+            padding: 4px 0;
+            font-size: 14px;
+            color: #475569;
+        }
+        .info-card strong {
+            color: #1e293b;
+        }
+        .order-details {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .order-details th {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            padding: 12px 14px;
+            text-align: left;
+        }
+        .order-details td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+            font-size: 14px;
+        }
+        .order-details tr:last-child td {
+            border-bottom: none;
+        }
+        .total-row {
+            background-color: #f8fafc;
+            font-weight: bold;
+        }
+        .total-row td {
+            border-top: 2px solid #e2e8f0;
+            font-size: 16px;
+            color: #1e3a8a;
+        }
+        .shipping-box {
+            background-color: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #1e40af;
+        }
+        .shipping-box strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #1e3a8a;
+        }
+        .btn-wrapper {
+            text-align: center;
+            margin: 32px 0 20px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+            background-color: #1e40af;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+        }
+        .footer {
+            background-color: #1f2937;
+            color: #9ca3af;
+            text-align: center;
+            padding: 24px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        .footer a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Order Confirmed!</h1>
-        </div>
-        <div class="content">
-            <h2>Hi {{CustomerName}},</h2>
-            <p>Thank you for your order! We're preparing it for shipment. Below are the details of your purchase.</p>
-            
-            <p><strong>Order Number:</strong> #{{OrderId}}<br>
-            <strong>Order Date:</strong> {{OrderDate}}</p>
-
-            <table class="order-details">
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Example row for template replacement -->
-                    {{#each OrderItems}}
-                    <tr>
-                        <td>{{ProductName}}</td>
-                        <td>{{Quantity}}</td>
-                        <td>{{Price}}</td>
-                    </tr>
-                    {{/each}}
-                    <tr class="total-row">
-                        <td colspan="2" style="text-align: right;">Total:</td>
-                        <td>{{TotalAmount}}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <p><strong>Shipping Address:</strong><br>
-            {{ShippingAddress}}</p>
-
-            <div style="text-align: center;">
-                <a href="{{OrderTrackingUrl}}" class="button">Track Your Order</a>
+    <div class="wrapper">
+        <div class="container">
+            <div class="header">
+                <div class="brand-name">AuraShop</div>
+                <h1>Order Confirmed!</h1>
+                <p>Thank you for shopping with us</p>
             </div>
-            
-            <p style="margin-top: 30px;">If you have any questions about your order, please reply to this email.</p>
-            <p>Best regards,<br>The ShopHub Team</p>
-        </div>
-        <div class="footer">
-            &copy; {{CurrentYear}} ShopHub. All rights reserved.
+            <div class="content">
+                <h2 class="greeting">Hi {{CustomerName}},</h2>
+                <p style="margin: 0 0 16px 0;">
+                    We've received your order and our team is already preparing it for shipment. Below is your detailed receipt.
+                </p>
+                
+                <div class="info-card">
+                    <table>
+                        <tr>
+                            <td><strong>Order ID:</strong> #{{OrderId}}</td>
+                            <td style="text-align: right;"><strong>Order Date:</strong> {{OrderDate}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <table class="order-details">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th style="text-align: center;">Qty</th>
+                            <th style="text-align: right;">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each OrderItems}}
+                        <tr>
+                            <td>{{ProductName}}</td>
+                            <td style="text-align: center;">{{Quantity}}</td>
+                            <td style="text-align: right;">{{Price}}</td>
+                        </tr>
+                        {{/each}}
+                        <tr class="total-row">
+                            <td colspan="2" style="text-align: right;">Total Amount:</td>
+                            <td style="text-align: right; color: #16a34a; font-size: 17px;">{{TotalAmount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="shipping-box">
+                    <strong>Delivery Address:</strong>
+                    {{ShippingAddress}}
+                </div>
+
+                <div class="btn-wrapper">
+                    <a href="{{OrderTrackingUrl}}" class="button" target="_blank">Track Your Order</a>
+                </div>
+                
+                <p style="margin-top: 30px; font-size: 13px; color: #64748b; text-align: center;">
+                    If you have any questions or need help with your order, please reply directly to this email.
+                </p>
+            </div>
+            <div class="footer">
+                &copy; {{CurrentYear}} AuraShop. All rights reserved.<br>
+                Premium Quality &bull; Fast Delivery &bull; Secure Payments
+            </div>
         </div>
     </div>
 </body>

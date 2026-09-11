@@ -1,9 +1,10 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Azure.Core.Serialization;
 using Microsoft.AspNetCore.Http;
 using myshop.BLL.DTOs.Cart;
 using myshop.BLL.DTOs.Product.Admin;
 using myshop.BLL.DTOs.Product.Customer;
+using myshop.BLL.DTOs.ReviewDTO;
 using myshop.BLL.IServices;
 using myshop.BLL.PageList;
 using myshop.DAL.Iconfiguration;
@@ -154,6 +155,19 @@ namespace myshop.BLL.Services
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<DisplayProductDetailsDTO> GetProductDetailsForCustomerAsync(int productId)
+        {
+            var productDetails = await _unitOfWork.Products.GetProductDetails(productId);
+            var mappedProduct = _mapper.Map<DisplayProductDetailsDTO>(productDetails);
+            if (productDetails.Reviews.Any())
+            {
+                mappedProduct.Reviews = _mapper.Map<IEnumerable<DisplayReviewDTO>>(productDetails.Reviews);
+                mappedProduct.reviewCount = productDetails.Reviews.Count();
+                mappedProduct.avgRating = productDetails.Reviews.Average(r => r.rating);
+            }
+                return mappedProduct;
         }
     }
 }
